@@ -23,12 +23,7 @@ public class QuestionDaoCsv implements QuestionDao {
     public List<Question> findAll() {
         List<Question> questions = new ArrayList<>();
 
-        try (
-                InputStream iStream =
-                         getClass()
-                        .getClassLoader()
-                        .getResourceAsStream(provider.getTestFileName())
-        ) {
+        try (InputStream iStream = getResourceAsStream(provider.getTestFileName())) {
             Objects.requireNonNull(iStream, String.format("Have no file %s", provider.getTestFileName()));
             Scanner scanner = new Scanner(Objects.requireNonNull(iStream));
 
@@ -36,10 +31,10 @@ public class QuestionDaoCsv implements QuestionDao {
             while (scanner.hasNextLine()) {
                 questions.add(
                     lineToQuestionMapper.toQuestion(
-                            scanner.nextLine(),
-                            provider.getQuestionTag(),
-                            provider.getAnswerTag(),
-                            provider.getAnswerSplitter()
+                        scanner.nextLine(),
+                        provider.getQuestionTag(),
+                        provider.getAnswerTag(),
+                        provider.getAnswerSplitter()
                     )
                 );
             }
@@ -47,5 +42,11 @@ public class QuestionDaoCsv implements QuestionDao {
             throw new QuestionReadException(e.getMessage());
         }
         return questions;
+    }
+
+    private InputStream getResourceAsStream(String fileName) {
+        return getClass()
+                .getClassLoader()
+                .getResourceAsStream(fileName);
     }
 }
