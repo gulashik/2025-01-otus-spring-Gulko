@@ -26,7 +26,7 @@ public class CsvQuestionDao implements QuestionDao {
                 InputStream iStream =
                          getClass()
                         .getClassLoader()
-                        .getResourceAsStream(provider.getTestFileName());
+                        .getResourceAsStream(provider.getTestFileName())
         ) {
             Objects.requireNonNull(iStream, String.format("Have no file %s", provider.getTestFileName()));
             Scanner scanner = new Scanner(Objects.requireNonNull(iStream));
@@ -38,7 +38,7 @@ public class CsvQuestionDao implements QuestionDao {
                             scanner.nextLine(),
                             provider.getQuestionTag(),
                             provider.getAnswerTag(),
-                            provider.getAnswerSpliter()
+                            provider.getAnswerSplitter()
                     )
                 );
             }

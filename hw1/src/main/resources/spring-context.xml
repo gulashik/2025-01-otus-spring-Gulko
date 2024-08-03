@@ -10,7 +10,7 @@
         <constructor-arg name="testFileName"  value="questions.csv"/>
         <constructor-arg name="questionTag"  value=";"/>
         <constructor-arg name="answerTag" value="\|"/>
-        <constructor-arg name="answerSpliter" value="%"/>
+        <constructor-arg name="answerSplitter" value="%"/>
     </bean>
 
     <bean id="ioService" class="org.gulash.service.StreamsIOService">

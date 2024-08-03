@@ -7,5 +7,5 @@ public interface TestFileProvider {
 
     String getAnswerTag();
 
-    String getAnswerSpliter();
+    String getAnswerSplitter();
 }

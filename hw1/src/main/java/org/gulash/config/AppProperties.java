@@ -12,5 +12,5 @@ public class AppProperties implements TestFileProvider {
 
     private String answerTag;
 
-    private String answerSpliter;
+    private String answerSplitter;
 }

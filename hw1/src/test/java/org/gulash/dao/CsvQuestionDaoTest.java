@@ -3,9 +3,13 @@ package org.gulash.dao;
 import org.gulash.config.AppProperties;
 import org.gulash.domain.Answer;
 import org.gulash.domain.Question;
+import org.gulash.mapper.LineMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -14,13 +18,18 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(locations = {"classpath:spring-context.xml"})
 class CsvQuestionDaoTest {
     @Autowired
+    @Spy
     private AppProperties appProperties;
 
     @Autowired
+    @Spy
+    private LineMapper lineMapper;
+
+    @InjectMocks
     private CsvQuestionDao csvQuestionDao;
 
     @Test
@@ -33,10 +42,7 @@ class CsvQuestionDaoTest {
         );
         Question question = new Question("Question1?", answers);
 
-        // Не красиво, но по другому не получается
-        appProperties.setTestFileName("test.csv");
-        // todo Подскажите, пожалуйста, как сделать, чтобы работал вызов? У меня не получилось.
-        //Mockito.when(appProperties.getTestFileName()).thenReturn("test.csv");
+        Mockito.when(appProperties.getTestFileName()).thenReturn("test.csv");
 
         // act
         List<Question> all = csvQuestionDao.findAll();
