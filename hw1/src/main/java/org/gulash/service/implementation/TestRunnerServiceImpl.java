@@ -1,4 +1,4 @@
-package org.gulash.service.implemetation;
+package org.gulash.service.implementation;
 
 import lombok.RequiredArgsConstructor;
 import org.gulash.service.TestRunnerService;

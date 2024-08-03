@@ -13,10 +13,10 @@
         <constructor-arg name="answerSplitter" value="%"/>
     </bean>
 
-    <bean id="ioService" class="org.gulash.service.implemetation.IOServiceStreams">
-        <constructor-arg index="0">
+    <bean id="ioService" class="org.gulash.service.implementation.IOServiceStreams">
+<!--        <constructor-arg index="0">
             <util:constant static-field="java.lang.System.out"/>
-        </constructor-arg>
+        </constructor-arg>-->
     </bean>
 
     <bean id="lineMapper" class="org.gulash.mapper.LineMapper"/>
@@ -26,12 +26,12 @@
         <constructor-arg name="lineToQuestionMapper" ref="lineMapper"/>
     </bean>
 
-    <bean id="testServiceImpl" class="org.gulash.service.implemetation.TestServiceImpl">
+    <bean id="testServiceImpl" class="org.gulash.service.implementation.TestServiceImpl">
         <constructor-arg name="ioService" ref="ioService"/>
         <constructor-arg name="questionDao" ref="questionDao"/>
     </bean>
 
-    <bean id="testRunnerServiceImpl" class="org.gulash.service.implemetation.TestRunnerServiceImpl">
+    <bean id="testRunnerServiceImpl" class="org.gulash.service.implementation.TestRunnerServiceImpl">
         <constructor-arg ref="testServiceImpl"/>
     </bean>
 
