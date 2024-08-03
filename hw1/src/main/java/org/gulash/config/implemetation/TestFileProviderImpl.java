@@ -1,11 +1,12 @@
-package org.gulash.config;
+package org.gulash.config.implemetation;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.gulash.config.TestFileProvider;
 
 @AllArgsConstructor
 @Data
-public class AppProperties implements TestFileProvider {
+public class TestFileProviderImpl implements TestFileProvider {
     private String testFileName;
 
     private String questionTag;

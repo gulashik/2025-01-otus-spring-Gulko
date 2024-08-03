@@ -1,7 +1,9 @@
-package org.gulash.service;
+package org.gulash.service.implemetation;
 
 import lombok.RequiredArgsConstructor;
 import org.gulash.dao.QuestionDao;
+import org.gulash.service.IOService;
+import org.gulash.service.TestService;
 
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {

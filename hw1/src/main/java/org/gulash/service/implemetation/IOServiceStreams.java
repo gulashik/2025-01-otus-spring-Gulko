@@ -1,11 +1,13 @@
-package org.gulash.service;
+package org.gulash.service.implemetation;
+
+import org.gulash.service.IOService;
 
 import java.io.PrintStream;
 
-public class StreamsIOService implements IOService {
+public class IOServiceStreams implements IOService {
     private final PrintStream printStream;
 
-    public StreamsIOService(PrintStream printStream) {
+    public IOServiceStreams(PrintStream printStream) {
 
         this.printStream = printStream;
     }

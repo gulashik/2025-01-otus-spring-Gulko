@@ -1,7 +1,8 @@
-package org.gulash.dao;
+package org.gulash.dao.implementation;
 
 import lombok.RequiredArgsConstructor;
 import org.gulash.config.TestFileProvider;
+import org.gulash.dao.QuestionDao;
 import org.gulash.domain.Question;
 import org.gulash.exceptions.QuestionReadException;
 import org.gulash.mapper.LineMapper;
@@ -13,7 +14,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 @RequiredArgsConstructor
-public class CsvQuestionDao implements QuestionDao {
+public class QuestionDaoCsv implements QuestionDao {
     private final TestFileProvider provider;
 
     private final LineMapper lineToQuestionMapper;
