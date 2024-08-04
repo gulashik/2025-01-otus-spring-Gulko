@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 @RequiredArgsConstructor
-public class QuestionDaoCsv implements QuestionDao {
+public class CsvQuestionDao implements QuestionDao {
     private final TestFileProvider provider;
 
     private final LineMapper lineToQuestionMapper;
@@ -23,11 +23,11 @@ public class QuestionDaoCsv implements QuestionDao {
     public List<Question> findAll() {
         List<Question> questions = new ArrayList<>();
 
-        try (InputStream iStream = getResourceAsStream(provider.getTestFileName())) {
-            Objects.requireNonNull(iStream, String.format("Have no file %s", provider.getTestFileName()));
-            Scanner scanner = new Scanner(Objects.requireNonNull(iStream));
+        try (InputStream iStream = getResourceAsStreamOrException(provider.getTestFileName())) {
+            Scanner scanner = new Scanner(iStream);
 
-            scanner.nextLine(); // skip first line
+            SkipFirstLines(scanner, provider.getSkipLines());
+
             while (scanner.hasNextLine()) {
                 questions.add(
                     lineToQuestionMapper.toQuestion(
@@ -44,9 +44,16 @@ public class QuestionDaoCsv implements QuestionDao {
         return questions;
     }
 
-    private InputStream getResourceAsStream(String fileName) {
-        return getClass()
-                .getClassLoader()
-                .getResourceAsStream(fileName);
+    private void SkipFirstLines(Scanner scanner, int lineCount) {
+        for (int i = 0; i < lineCount; i++) {
+            if (scanner.hasNextLine()) scanner.nextLine();
+        }
+    }
+
+    private InputStream getResourceAsStreamOrException(String fileName) {
+        return Objects.requireNonNull(
+                 getClass().getClassLoader().getResourceAsStream(fileName),
+                 String.format("Have no file %s", fileName)
+        );
     }
 }

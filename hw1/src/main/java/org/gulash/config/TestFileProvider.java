@@ -8,4 +8,6 @@ public interface TestFileProvider {
     String getAnswerTag();
 
     String getAnswerSplitter();
+
+    int getSkipLines();
 }

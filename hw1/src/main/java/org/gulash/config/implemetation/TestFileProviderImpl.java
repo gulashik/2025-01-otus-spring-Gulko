@@ -14,4 +14,6 @@ public class TestFileProviderImpl implements TestFileProvider {
     private String answerTag;
 
     private String answerSplitter;
+
+    private int skipLines;
 }

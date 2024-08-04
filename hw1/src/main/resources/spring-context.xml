@@ -11,6 +11,7 @@
         <constructor-arg name="questionTag"  value=";"/>
         <constructor-arg name="answerTag" value="\|"/>
         <constructor-arg name="answerSplitter" value="%"/>
+        <constructor-arg name="skipLines" value="1"/>
     </bean>
 
     <bean id="ioService" class="org.gulash.service.implementation.IOServiceStreams">
@@ -21,7 +22,7 @@
 
     <bean id="lineMapper" class="org.gulash.mapper.LineMapper"/>
 
-    <bean id="questionDao" class="org.gulash.dao.implementation.QuestionDaoCsv">
+    <bean id="questionDao" class="org.gulash.dao.implementation.CsvQuestionDao">
         <constructor-arg name="provider" ref="appProperties"/>
         <constructor-arg name="lineToQuestionMapper" ref="lineMapper"/>
     </bean>

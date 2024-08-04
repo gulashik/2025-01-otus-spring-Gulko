@@ -1,7 +1,7 @@
 package org.gulash.dao;
 
 import org.gulash.config.implemetation.TestFileProviderImpl;
-import org.gulash.dao.implementation.QuestionDaoCsv;
+import org.gulash.dao.implementation.CsvQuestionDao;
 import org.gulash.domain.Answer;
 import org.gulash.domain.Question;
 import org.gulash.mapper.LineMapper;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(locations = {"classpath:spring-context.xml"})
-class QuestionDaoCsvTest {
+class CsvQuestionDaoTest {
     @Autowired
     @Spy
     private TestFileProviderImpl provider;
@@ -31,15 +31,15 @@ class QuestionDaoCsvTest {
     private LineMapper lineMapper;
 
     @InjectMocks
-    private QuestionDaoCsv questionDao;
+    private CsvQuestionDao questionDao;
 
     @Test
     public void testExampleBean() {
         // arrange
         List<Answer> answers = List.of(
-                new Answer("Correct answer Q1", true),
-                new Answer("Incorrect answer1 Q1", false),
-                new Answer("Incorrect answer2 Q1", false)
+                new Answer("1) Correct answer Q1", true),
+                new Answer("2) Incorrect answer1 Q1", false),
+                new Answer("3) Incorrect answer2 Q1", false)
         );
         Question question = new Question("Question1?", answers);
 

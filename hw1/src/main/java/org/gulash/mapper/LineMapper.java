@@ -27,11 +27,17 @@ public class LineMapper {
 
     private List<Answer> toAnswer(String line, String answerTag, String answerSplitter) {
         List<Answer> answers = new ArrayList<>();
+        int questionIndex = 0;
 
         Scanner rawAnswers = new Scanner(line).useDelimiter(answerTag);
         while (rawAnswers.hasNext()) {
             String[] rawAnswer = rawAnswers.next().trim().split(answerSplitter);
-            answers.add(new Answer(rawAnswer[0], Boolean.parseBoolean(rawAnswer[1])));
+            answers.add(
+                new Answer(
+                    String.format("%1$s) %2$s", ++questionIndex, rawAnswer[0]),
+                    Boolean.parseBoolean(rawAnswer[1])
+                )
+            );
         }
         return answers;
     }
