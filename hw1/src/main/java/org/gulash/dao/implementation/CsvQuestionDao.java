@@ -26,7 +26,7 @@ public class CsvQuestionDao implements QuestionDao {
         try (InputStream iStream = getResourceAsStreamOrException(provider.getTestFileName())) {
             Scanner scanner = new Scanner(iStream);
 
-            SkipFirstLines(scanner, provider.getSkipLines());
+            skipFirstLines(scanner, provider.getSkipLines());
 
             while (scanner.hasNextLine()) {
                 questions.add(
@@ -44,9 +44,11 @@ public class CsvQuestionDao implements QuestionDao {
         return questions;
     }
 
-    private void SkipFirstLines(Scanner scanner, int lineCount) {
+    private void skipFirstLines(Scanner scanner, int lineCount) {
         for (int i = 0; i < lineCount; i++) {
-            if (scanner.hasNextLine()) scanner.nextLine();
+            if (scanner.hasNextLine()) {
+                scanner.nextLine();
+            }
         }
     }
 
