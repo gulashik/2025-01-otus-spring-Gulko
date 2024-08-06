@@ -18,7 +18,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <minimal.maven.version>3.9.0</minimal.maven.version>
+        <minimal.maven.version>3.8.0</minimal.maven.version>
         <enforcer.plugin>3.5.0</enforcer.plugin>
         <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
         <checkstyle.version>10.15.0</checkstyle.version>
