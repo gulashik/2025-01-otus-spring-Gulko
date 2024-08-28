@@ -1,54 +1,33 @@
 package org.gulash.dao;
 
-
-
-import org.gulash.Application;
 import org.gulash.config.TestFileProperties;
 import org.gulash.dao.implemetation.CsvQuestionDao;
 import org.gulash.domain.Answer;
 import org.gulash.domain.Question;
 import org.gulash.mapper.LineMapper;
-import org.gulash.service.TestRunnerService;
-import org.gulash.service.implemetation.TestRunnerServiceImpl;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScans;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 
-//@SpringBootTest
-//@ActiveProfiles(profiles = {"test"})
-// @ExtendWith({SpringExtension.class})
-//@ContextConfiguration(classes = {Application.class})
-//@TestPropertySource("classpath:application-test.yml")
+@ExtendWith({SpringExtension.class})
 class CsvQuestionDaoTest {
-    @Autowired
-    @Spy
-    private TestFileProperties fileProperties;
+    @Mock
+    private TestFileProperties testFileProperties;
+
+    @Mock
+    private LineMapper lineMapper;
 
     @InjectMocks
     private CsvQuestionDao questionDao;
 
-    @Mock
-    private TestRunnerService testRunnerService;
-
-    @Disabled
     @Test
     public void testExampleBean() {
         // arrange
@@ -59,7 +38,12 @@ class CsvQuestionDaoTest {
         );
         Question question = new Question("Question1?", answers);
 
-//        Mockito.when(fileProperties.name()).thenReturn("test.csv");
+        when(testFileProperties.name()).thenReturn("test.csv");
+        when(testFileProperties.skipLines()).thenReturn(1);
+        when(testFileProperties.question()).thenReturn(new TestFileProperties.Question(";"));
+        when(testFileProperties.answer()).thenReturn(new TestFileProperties.Answer("\\|", "%"));
+
+        when(lineMapper.toQuestion(any(), any(), any(), any())).thenCallRealMethod();
 
         // act
         List<Question> all = questionDao.findAll();
