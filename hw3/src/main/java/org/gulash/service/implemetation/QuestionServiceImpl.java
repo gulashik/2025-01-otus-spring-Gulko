@@ -1,10 +1,13 @@
 package org.gulash.service.implemetation;
 
 import lombok.RequiredArgsConstructor;
+import org.gulash.domain.Answer;
 import org.gulash.domain.Question;
-import org.gulash.mapper.QuestionMapper;
 import org.gulash.service.QuestionService;
+import org.gulash.service.gateway.LocalizedMessagesServiceGateway;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -12,7 +15,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final IOServiceImpl ioService;
 
-    private final QuestionMapper questionMapper;
+    private final LocalizedMessagesServiceGateway localizedMessagesService;
 
     @Override
     public boolean askQuestion(Question question) {
@@ -20,8 +23,8 @@ public class QuestionServiceImpl implements QuestionService {
         int answerNumber = ioService.readIntForRangeWithPrompt(
                 /*min*/ 1,
                 /*max*/ 3,
-                /*prompt*/ questionMapper.toFormatedString(question),
-                /*errorMessage*/ "Incorrect answer number"
+                /*prompt*/ toFormatedString(question),
+                /*errorMessage*/ localizedMessagesService.getMessage("Error.message.incorrect.answer.number")
         );
 
         return checkAnswer(question, answerNumber);
@@ -33,5 +36,18 @@ public class QuestionServiceImpl implements QuestionService {
                 .answers()
                 .get(answerIndex)
                 .isCorrect();
+    }
+
+    private String toFormatedString(Question question) {
+        Objects.requireNonNull(question);
+
+        StringBuilder resultString = new StringBuilder();
+        resultString.append(question.text()).append("\n");
+
+        for (Answer answer : question.answers()) {
+            resultString.append(answer.text()).append("\n");
+        }
+
+        return resultString.toString();
     }
 }
