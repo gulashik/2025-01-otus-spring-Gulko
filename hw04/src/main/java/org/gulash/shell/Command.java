@@ -2,7 +2,6 @@ package org.gulash.shell;
 
 import lombok.RequiredArgsConstructor;
 import org.gulash.service.TestRunnerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
