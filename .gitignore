@@ -14,3 +14,4 @@ target
 *.iml
 *.ipr
 */dependency-reduced-pom.xml
+*spring-shell.log
