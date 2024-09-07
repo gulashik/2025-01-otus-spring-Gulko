@@ -10,8 +10,8 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>hw3</artifactId>
-    <name>hw3</name>
+    <artifactId>hw03</artifactId>
+    <name>hw03</name>
 
     <properties>
         <maven.compiler.target>17</maven.compiler.target>
