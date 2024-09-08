@@ -1,5 +1,7 @@
 package org.gulash.service;
 
+import org.gulash.domain.Student;
+
 public interface TestRunnerService {
-    void run(String firstName, String lastName);
+    void run(Student student);
 }

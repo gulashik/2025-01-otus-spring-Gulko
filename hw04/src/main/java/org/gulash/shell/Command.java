@@ -1,6 +1,7 @@
 package org.gulash.shell;
 
 import lombok.RequiredArgsConstructor;
+import org.gulash.domain.Student;
 import org.gulash.service.TestRunnerService;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -19,6 +20,6 @@ public class Command {
         String studentFirstName,
         String studentLastName
     ) {
-        testRunnerService.run(studentFirstName, studentLastName);
+        testRunnerService.run(new Student(studentFirstName, studentLastName));
     }
 }

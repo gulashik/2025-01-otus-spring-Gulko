@@ -1,19 +1,17 @@
 package org.gulash.dao;
 
+import org.gulash.config.StudentTest;
 import org.gulash.dao.implemetation.CsvQuestionDao;
 import org.gulash.domain.Answer;
 import org.gulash.domain.Question;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ActiveProfiles(profiles = {"test"})
-@SpringBootTest
+@StudentTest
 class CsvQuestionDaoTest {
     @Autowired
     private CsvQuestionDao questionDao;
