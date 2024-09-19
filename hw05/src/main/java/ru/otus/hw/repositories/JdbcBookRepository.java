@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.support.TransactionTemplate;
+import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -23,22 +23,16 @@ public class JdbcBookRepository implements BookRepository {
 
     private final NamedParameterJdbcTemplate namedJdbc;
 
-    private final TransactionTemplate transactionTemplate;
-
-    private final AuthorRepository authorRepository;
-
-    private final GenreRepository genreRepository;
-
     private final String BOOK_SQL = """
             select
               b.id, b.title,
               b.genre_id, g.name as genre_name,
               b.author_id, a.full_name as author_full_name
-            from 
-              books b 
-              left join genres g 
-                  on b.genre_id = g.id 
-              left join authors a 
+            from
+              books b
+              left join genres g
+                  on b.genre_id = g.id
+              left join authors a
                   on b.author_id = a.id
           """;
 
@@ -69,45 +63,40 @@ public class JdbcBookRepository implements BookRepository {
     }
 
     private Book insert(Book book) {
-        return transactionTemplate.execute(
-            status -> {
-                // obey referential integrity
-                genreRepository.save(book.getGenre());
-                authorRepository.save(book.getAuthor());
+        GeneratedKeyHolder keyHolderBook = new GeneratedKeyHolder();
+        MapSqlParameterSource bookParams = new MapSqlParameterSource() {{
+            addValue("title", book.getTitle());
+            addValue("author_id", book.getAuthor().getId());
+            addValue("genre_id", book.getGenre().getId());
+        }};
 
-                GeneratedKeyHolder keyHolderBook = new GeneratedKeyHolder();
-                MapSqlParameterSource bookParams = new MapSqlParameterSource() {{
-                    addValue("title", book.getTitle());
-                    addValue("author_id", book.getAuthor().getId());
-                    addValue("genre_id", book.getGenre().getId());
-                }};
-
-                namedJdbc.update(
-                        "insert into books(title, author_id, genre_id) values(:title, :author_id, :genre_id)",
-                        bookParams,
-                        keyHolderBook
-                );
-                book.setId(keyHolderBook.getKeyAs(Long.class));
-                return book;
-            }
+        namedJdbc.update(
+                "insert into books(title, author_id, genre_id) values(:title, :author_id, :genre_id)",
+                bookParams,
+                keyHolderBook
         );
+        book.setId(keyHolderBook.getKeyAs(Long.class));
+        return book;
     }
 
     private Book update(Book book) {
-        return transactionTemplate.execute(
-            status -> {
-                // obey referential integrity
-                genreRepository.save(book.getGenre());
-                authorRepository.save(book.getAuthor());
+        bookValidateAndThrow(book);
 
-                namedJdbc.update(
-                    "merge into books(id, title, author_id, genre_id) values (:id, :title,:author_id, :genre_id)",
-                    Map.of("id", book.getId(), "title", book.getTitle(),
-                            "author_id", book.getAuthor().getId(), "genre_id", book.getGenre().getId())
-                );
-                return book;
-            }
+        namedJdbc.update(
+            "merge into books(id, title, author_id, genre_id) values (:id, :title,:author_id, :genre_id)",
+            Map.of("id", book.getId(), "title", book.getTitle(),
+                    "author_id", book.getAuthor().getId(), "genre_id", book.getGenre().getId())
         );
+        return book;
+    }
+
+    private void bookValidateAndThrow(Book expectedBook) {
+        Book actualBook = findById(expectedBook.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Book with id " + expectedBook.getId() + " not found"));
+
+        if (actualBook.equals(expectedBook)) {
+            throw new EntityNotFoundException("Book with id " + expectedBook.getId() + " not changed");
+        }
     }
 
     private static class BookRowMapper implements RowMapper<Book> {
