@@ -80,23 +80,12 @@ public class JdbcBookRepository implements BookRepository {
     }
 
     private Book update(Book book) {
-        bookValidateAndThrow(book);
-
         namedJdbc.update(
             "merge into books(id, title, author_id, genre_id) values (:id, :title,:author_id, :genre_id)",
             Map.of("id", book.getId(), "title", book.getTitle(),
                     "author_id", book.getAuthor().getId(), "genre_id", book.getGenre().getId())
         );
         return book;
-    }
-
-    private void bookValidateAndThrow(Book expectedBook) {
-        Book actualBook = findById(expectedBook.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Book with id " + expectedBook.getId() + " not found"));
-
-        if (actualBook.equals(expectedBook)) {
-            throw new EntityNotFoundException("Book with id " + expectedBook.getId() + " not changed");
-        }
     }
 
     private static class BookRowMapper implements RowMapper<Book> {
