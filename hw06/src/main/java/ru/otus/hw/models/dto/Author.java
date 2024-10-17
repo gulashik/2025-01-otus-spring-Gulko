@@ -1,4 +1,4 @@
-package ru.otus.hw.models.domains;
+package ru.otus.hw.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,12 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Book {
+public class Author {
     private long id;
 
-    private String title;
-
-    private Author author;
-
-    private Genre genre;
+    private String fullName;
 }

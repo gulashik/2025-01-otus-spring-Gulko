@@ -4,9 +4,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.otus.hw.models.domains.Genre;
-import ru.otus.hw.models.entities.GenreEntity;
-import ru.otus.hw.models.mappers.GenreMapper;
+import ru.otus.hw.models.models.Genre;
+import ru.otus.hw.services.mappers.GenreMapper;
 import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.List;
@@ -22,9 +21,9 @@ public class JpaGenreRepository implements GenreRepository {
     private final GenreMapper genreMapper;
 
     @Override
-    public List<Genre> findAll() {
+    public List<ru.otus.hw.models.dto.Genre> findAll() {
         return entityManager
-            .createQuery("select g from genres g", GenreEntity.class)
+            .createQuery("select g from genres g", Genre.class)
             .getResultList()
             .stream()
             .map(genreMapper::toDomain)
@@ -32,13 +31,13 @@ public class JpaGenreRepository implements GenreRepository {
     }
 
     @Override
-    public Optional<Genre> findById(long id) {
-        var genreEntity = entityManager.find(GenreEntity.class, id);
+    public Optional<ru.otus.hw.models.dto.Genre> findById(long id) {
+        var genreEntity = entityManager.find(Genre.class, id);
         return Optional.ofNullable(genreMapper.toDomain(genreEntity));
     }
 
     @Override
-    public Genre save(Genre genre) {
+    public ru.otus.hw.models.dto.Genre save(ru.otus.hw.models.dto.Genre genre) {
         var genreEntity = entityManager.merge(genreMapper.toEntity(genre));
         return genreMapper.toDomain(genreEntity);
     }

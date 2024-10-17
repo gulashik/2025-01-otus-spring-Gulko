@@ -1,9 +1,9 @@
 package ru.otus.hw.objects;
 
-import ru.otus.hw.models.domains.Author;
-import ru.otus.hw.models.domains.Book;
-import ru.otus.hw.models.domains.Comment;
-import ru.otus.hw.models.domains.Genre;
+import ru.otus.hw.models.dto.Author;
+import ru.otus.hw.models.dto.Book;
+import ru.otus.hw.models.dto.Comment;
+import ru.otus.hw.models.dto.Genre;
 
 import java.util.List;
 import java.util.Map;

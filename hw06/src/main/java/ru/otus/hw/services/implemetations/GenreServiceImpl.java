@@ -2,7 +2,7 @@ package ru.otus.hw.services.implemetations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.hw.models.domains.Genre;
+import ru.otus.hw.models.dto.Genre;
 import ru.otus.hw.repositories.GenreRepository;
 import ru.otus.hw.services.GenreService;
 

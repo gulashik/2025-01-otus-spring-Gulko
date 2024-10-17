@@ -1,6 +1,6 @@
 package ru.otus.hw.services;
 
-import ru.otus.hw.models.domains.Genre;
+import ru.otus.hw.models.dto.Genre;
 
 import java.util.List;
 

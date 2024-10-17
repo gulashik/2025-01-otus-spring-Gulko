@@ -2,7 +2,7 @@ package ru.otus.hw.services.implemetations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.hw.models.domains.Author;
+import ru.otus.hw.models.dto.Author;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.services.AuthorService;
 

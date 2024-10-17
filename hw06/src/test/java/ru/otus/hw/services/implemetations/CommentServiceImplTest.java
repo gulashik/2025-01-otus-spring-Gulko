@@ -1,4 +1,4 @@
-package ru.otus.hw.repositories.implementations;
+package ru.otus.hw.services.implemetations;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -6,35 +6,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.models.domains.Book;
-import ru.otus.hw.models.domains.Comment;
-import ru.otus.hw.models.mappers.AuthorMapper;
-import ru.otus.hw.models.mappers.BookMapper;
-import ru.otus.hw.models.mappers.CommentMapper;
-import ru.otus.hw.models.mappers.GenreMapper;
+import ru.otus.hw.models.dto.Book;
+import ru.otus.hw.models.dto.Comment;
+import ru.otus.hw.repositories.implementations.JpaCommentRepository;
+import ru.otus.hw.services.mappers.AuthorMapper;
+import ru.otus.hw.services.mappers.BookMapper;
+import ru.otus.hw.services.mappers.CommentMapper;
+import ru.otus.hw.services.mappers.GenreMapper;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static ru.otus.hw.objects.TestObjects.*;
+import static ru.otus.hw.objects.TestObjects.getDbBooks;
+import static ru.otus.hw.objects.TestObjects.getDbComments;
 
-@DisplayName("Репозиторий на основе Jpa для работы с комментариями ")
+@DisplayName("Сервис на основе Jpa для работы с комментариями ")
 @DataJpaTest
 @Import(
     {
-        JpaBookRepository.class,  BookMapper.class,
-        JpaGenreRepository.class, GenreMapper.class,
-        JpaAuthorRepository.class, AuthorMapper.class,
-        JpaCommentRepository.class, CommentMapper.class
+        CommentServiceImpl.class, JpaCommentRepository.class, CommentMapper.class,
+        BookMapper.class,
+        AuthorMapper.class,
+        GenreMapper.class
     }
 )
-class JpaCommentRepositoryTest {
+class CommentServiceImplTest {
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
-    private JpaCommentRepository commentRepository;
+    private CommentServiceImpl service;
 
     private final List<Book> dbBooks = getDbBooks();
 
@@ -42,9 +44,9 @@ class JpaCommentRepositoryTest {
 
     @DisplayName("должен загружать комментарий по id")
     @Test
-    void shouldReturnCorrectCommentById() {
+    void findById() {
         var expectedComment = dbComments.get(0);
-        var actualComment = commentRepository.findById(expectedComment.getId());
+        var actualComment = service.findById(expectedComment.getId());
 
         assertThat(actualComment)
             .isPresent()
@@ -54,42 +56,41 @@ class JpaCommentRepositoryTest {
 
     @DisplayName("должен загружать список всех комментариев по книге")
     @Test
-    void shouldReturnCorrectCommentsByBook() {
+    void findAllForBook() {
         long id = dbBooks.get(0).getId();
         List<Comment> excpectedComments = dbComments
             .stream()
             .filter(comment -> comment.getBook().getId() == id)
             .toList();
 
-        List<Comment> actualComments = commentRepository.findAllForBook(id);
+        List<Comment> actualComments = service.findAllForBook(id);
 
         assertThat(actualComments).containsExactlyElementsOf(excpectedComments);
     }
 
     @DisplayName("должен сохранить комментарий")
     @Test
-    void shouldSaveComment() {
+    void save() {
         var expectedComment = dbComments.get(0);
         expectedComment.setId(0L);
-        expectedComment = commentRepository.save(expectedComment);
+        expectedComment = service.save(expectedComment);
 
         entityManager.clear();
-        var actualComment = commentRepository.findById(expectedComment.getId());
+        var actualComment = service.findById(expectedComment.getId());
 
         assertThat(actualComment).isPresent().get().isEqualTo(expectedComment);
     }
 
     @DisplayName("должен удалить комментарий")
     @Test
-    void shouldDeleteComment() {
+    void deleteById() {
         var id = dbComments.get(0).getId();
 
-        commentRepository.deleteById(id);
+        service.deleteById(id);
 
         entityManager.clear();
-        var actualComment = commentRepository.findById(id);
+        var actualComment = service.findById(id);
 
         assertThat(actualComment).isEmpty();
     }
-
 }
