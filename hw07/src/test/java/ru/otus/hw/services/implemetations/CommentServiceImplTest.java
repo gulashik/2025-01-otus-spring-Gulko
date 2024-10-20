@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.dto.Book;
 import ru.otus.hw.models.dto.Comment;
-import ru.otus.hw.repositories.implementations.JpaCommentRepository;
 import ru.otus.hw.services.mappers.AuthorMapper;
 import ru.otus.hw.services.mappers.BookMapper;
 import ru.otus.hw.services.mappers.CommentMapper;
@@ -24,7 +23,7 @@ import static ru.otus.hw.objects.TestObjects.getDbComments;
 @DataJpaTest
 @Import(
     {
-        CommentServiceImpl.class, JpaCommentRepository.class, CommentMapper.class,
+        CommentServiceImpl.class, CommentMapper.class,
         BookMapper.class,
         AuthorMapper.class,
         GenreMapper.class
@@ -88,7 +87,8 @@ class CommentServiceImplTest {
 
         service.deleteById(id);
 
-        entityManager.clear();
+        entityManager.flush();
+
         var actualComment = service.findById(id);
 
         assertThat(actualComment).isEmpty();

@@ -31,6 +31,7 @@ public class BookServiceImpl implements BookService {
 
     private final GenreMapper genreMapper;
 
+    @Transactional
     @Override
     public Optional<Book> findById(long id) {
         return bookRepository
@@ -38,6 +39,7 @@ public class BookServiceImpl implements BookService {
             .map(bookMapper::toDomain);
     }
 
+    @Transactional
     @Override
     public List<Book> findAll() {
         return bookRepository

@@ -11,9 +11,6 @@ import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.dto.Author;
 import ru.otus.hw.models.dto.Book;
 import ru.otus.hw.models.dto.Genre;
-import ru.otus.hw.repositories.implementations.JpaAuthorRepository;
-import ru.otus.hw.repositories.implementations.JpaBookRepository;
-import ru.otus.hw.repositories.implementations.JpaGenreRepository;
 import ru.otus.hw.services.mappers.AuthorMapper;
 import ru.otus.hw.services.mappers.BookMapper;
 import ru.otus.hw.services.mappers.GenreMapper;
@@ -28,9 +25,9 @@ import static ru.otus.hw.objects.TestObjects.*;
 @Import(
     {
         BookServiceImpl.class,
-        JpaBookRepository.class,  BookMapper.class,
-        JpaGenreRepository.class, GenreMapper.class,
-        JpaAuthorRepository.class, AuthorMapper.class
+        BookMapper.class,
+        GenreMapper.class,
+        AuthorMapper.class
     }
 )
 class BookServiceImplTest {

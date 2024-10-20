@@ -2,6 +2,7 @@ package ru.otus.hw.services.implemetations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.dto.Comment;
 import ru.otus.hw.repositories.CommentRepository;
 import ru.otus.hw.services.CommentService;
@@ -28,7 +29,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> findAllForBook(long bookId) {
         return commentRepository
-            .findAllForBook(bookId)
+//            .findAllForBook(bookId)
+            .findAllByBookId(bookId)
             .stream()
             .map(commentMapper::toDomain)
             .toList();
@@ -40,6 +42,7 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDomain(commentEntity);
     }
 
+    @Transactional
     @Override
     public void deleteById(long id) {
         commentRepository.deleteById(id);
