@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw.models.models.Book;
 import ru.otus.hw.repositories.BookRepository;
-import ru.otus.hw.services.mappers.BookMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -21,20 +20,17 @@ public class JpaBookRepository implements BookRepository {
     @PersistenceContext
     private final EntityManager entityManager;
 
-    private final BookMapper bookMapper;
-
     @Override
-    public Optional<ru.otus.hw.models.dto.Book> findById(long id) {
+    public Optional<Book> findById(long id) {
         Map<String, Object> hints = Map.of(
             FETCH.getKey(),
             entityManager.getEntityGraph("BookEntity-author-genre")
         );
-        var bookEntity = entityManager.find(Book.class, id, hints);
-        return Optional.ofNullable(bookMapper.toDomain(bookEntity));
+        return Optional.ofNullable(entityManager.find(Book.class, id, hints));
     }
 
     @Override
-    public List<ru.otus.hw.models.dto.Book> findAll() {
+    public List<Book> findAll() {
         var entityGraph = entityManager.getEntityGraph("BookEntity-author-genre");
 
         return entityManager
@@ -42,21 +38,16 @@ public class JpaBookRepository implements BookRepository {
             .setHint(FETCH.getKey(), entityGraph)
             .getResultList()
             .stream()
-            .map(bookMapper::toDomain)
             .toList();
     }
 
     @Override
-    public ru.otus.hw.models.dto.Book save(ru.otus.hw.models.dto.Book book) {
-        var bookEntity = entityManager.merge(bookMapper.toEntity(book));
-        return bookMapper.toDomain(bookEntity);
+    public Book save(Book book) {
+        return entityManager.merge(book);
     }
 
     @Override
     public void deleteById(long id) {
-        entityManager
-            .createQuery("delete from books b where b.id = :id")
-            .setParameter("id", id)
-            .executeUpdate();
+        entityManager.remove(entityManager.find(Book.class, id));
     }
 }

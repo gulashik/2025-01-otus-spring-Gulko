@@ -1,5 +1,5 @@
 insert into authors(full_name)
-values ('Author_1'), ('Author_2'), ('Author_3');
+values ('Dostoyevskiy_1'), ('Murakami_2'), ('Mayn_Rid_3');
 
 insert into genres(name)
 values ('Genre_1'), ('Genre_2'), ('Genre_3');

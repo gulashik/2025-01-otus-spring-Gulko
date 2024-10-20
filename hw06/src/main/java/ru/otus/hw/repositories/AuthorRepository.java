@@ -1,6 +1,6 @@
 package ru.otus.hw.repositories;
 
-import ru.otus.hw.models.dto.Author;
+import ru.otus.hw.models.models.Author;
 
 import java.util.List;
 import java.util.Optional;

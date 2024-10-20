@@ -18,27 +18,23 @@ public class JpaGenreRepository implements GenreRepository {
     @PersistenceContext
     private final EntityManager entityManager;
 
-    private final GenreMapper genreMapper;
 
     @Override
-    public List<ru.otus.hw.models.dto.Genre> findAll() {
+    public List<Genre> findAll() {
         return entityManager
             .createQuery("select g from genres g", Genre.class)
             .getResultList()
             .stream()
-            .map(genreMapper::toDomain)
             .toList();
     }
 
     @Override
-    public Optional<ru.otus.hw.models.dto.Genre> findById(long id) {
-        var genreEntity = entityManager.find(Genre.class, id);
-        return Optional.ofNullable(genreMapper.toDomain(genreEntity));
+    public Optional<Genre> findById(long id) {
+        return Optional.ofNullable(entityManager.find(Genre.class, id));
     }
 
     @Override
-    public ru.otus.hw.models.dto.Genre save(ru.otus.hw.models.dto.Genre genre) {
-        var genreEntity = entityManager.merge(genreMapper.toEntity(genre));
-        return genreMapper.toDomain(genreEntity);
+    public Genre save(Genre genre) {
+        return entityManager.merge(genre);
     }
 }

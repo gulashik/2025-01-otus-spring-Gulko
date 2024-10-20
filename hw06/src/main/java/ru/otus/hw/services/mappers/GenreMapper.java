@@ -9,6 +9,7 @@ public class GenreMapper {
         if (entity == null) {
             return null;
         }
+
         return new ru.otus.hw.models.dto.Genre(entity.getId(), entity.getName());
     }
 
@@ -16,6 +17,7 @@ public class GenreMapper {
         if (domain == null) {
             return null;
         }
+
         return new Genre(domain.getId(), domain.getName());
     }
 }
