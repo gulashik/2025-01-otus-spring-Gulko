@@ -58,10 +58,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public BookDto update(long id, String title, long authorId, long genreId) {
-        if (findById(id).isEmpty()) {
-            throw new EntityNotFoundException("Book with id " + id + " not found");
-        }
-
+        findById(id).orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " not found"));
         return save(id, title, authorId, genreId);
     }
 

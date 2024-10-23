@@ -13,10 +13,6 @@ public class BookMapper {
     private final GenreMapper genreMapper;
 
     public BookDto toDto(Book entity) {
-        if (entity == null) {
-            return null;
-        }
-
         var author = authorMapper.toDto(entity.getAuthor());
         var genre = genreMapper.toDto(entity.getGenre());
 
@@ -29,9 +25,6 @@ public class BookMapper {
     }
 
     public Book toEntity(BookDto dto) {
-        if (dto == null) {
-            return null;
-        }
         var authorEntity = authorMapper.toEntity(dto.getAuthorDto());
         var genreEntity = genreMapper.toEntity(dto.getGenreDto());
 

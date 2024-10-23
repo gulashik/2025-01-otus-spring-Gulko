@@ -29,7 +29,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto> findAllForBook(long bookId) {
         return commentRepository
-//            .findAllForBook(bookId)
             .findAllByBookId(bookId)
             .stream()
             .map(commentMapper::toDto)
@@ -38,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto save(CommentDto commentDto) {
-        ru.otus.hw.models.entity.Comment commentEntity = commentRepository.save(commentMapper.toEntity(commentDto));
+        var commentEntity = commentRepository.save(commentMapper.toEntity(commentDto));
         return commentMapper.toDto(commentEntity);
     }
 
