@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.models.dto.Book;
-import ru.otus.hw.models.dto.Comment;
+import ru.otus.hw.models.dto.BookDto;
+import ru.otus.hw.models.dto.CommentDto;
 import ru.otus.hw.services.mappers.AuthorMapper;
 import ru.otus.hw.services.mappers.BookMapper;
 import ru.otus.hw.services.mappers.CommentMapper;
@@ -29,7 +29,7 @@ import static ru.otus.hw.objects.TestObjects.getDbComments;
         GenreMapper.class
     }
 )
-class CommentServiceImplTest {
+class CommentDtoServiceImplTest {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -37,14 +37,14 @@ class CommentServiceImplTest {
     @Autowired
     private CommentServiceImpl service;
 
-    private final List<Book> dbBooks = getDbBooks();
+    private final List<BookDto> dbBookDtos = getDbBooks();
 
-    private final List<Comment> dbComments = getDbComments();
+    private final List<CommentDto> dbCommentDtos = getDbComments();
 
     @DisplayName("должен загружать комментарий по id")
     @Test
     void findById() {
-        var expectedComment = dbComments.get(0);
+        var expectedComment = dbCommentDtos.get(0);
         var actualComment = service.findById(expectedComment.getId());
 
         assertThat(actualComment)
@@ -56,21 +56,21 @@ class CommentServiceImplTest {
     @DisplayName("должен загружать список всех комментариев по книге")
     @Test
     void findAllForBook() {
-        long id = dbBooks.get(0).getId();
-        List<Comment> excpectedComments = dbComments
+        long id = dbBookDtos.get(0).getId();
+        List<CommentDto> excpectedCommentDtos = dbCommentDtos
             .stream()
-            .filter(comment -> comment.getBook().getId() == id)
+            .filter(comment -> comment.getBookDto().getId() == id)
             .toList();
 
-        List<Comment> actualComments = service.findAllForBook(id);
+        List<CommentDto> actualCommentDtos = service.findAllForBook(id);
 
-        assertThat(actualComments).containsExactlyElementsOf(excpectedComments);
+        assertThat(actualCommentDtos).containsExactlyElementsOf(excpectedCommentDtos);
     }
 
     @DisplayName("должен сохранить комментарий")
     @Test
     void save() {
-        var expectedComment = dbComments.get(0);
+        var expectedComment = dbCommentDtos.get(0);
         expectedComment.setId(0L);
         expectedComment = service.save(expectedComment);
 
@@ -83,7 +83,7 @@ class CommentServiceImplTest {
     @DisplayName("должен удалить комментарий")
     @Test
     void deleteById() {
-        var id = dbComments.get(0).getId();
+        var id = dbCommentDtos.get(0).getId();
 
         service.deleteById(id);
 

@@ -1,4 +1,4 @@
-package ru.otus.hw.models.models;
+package ru.otus.hw.models.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

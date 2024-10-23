@@ -3,7 +3,7 @@ package ru.otus.hw.services.implemetations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.models.dto.Comment;
+import ru.otus.hw.models.dto.CommentDto;
 import ru.otus.hw.repositories.CommentRepository;
 import ru.otus.hw.services.CommentService;
 import ru.otus.hw.services.mappers.CommentMapper;
@@ -20,26 +20,26 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
-    public Optional<Comment> findById(long id) {
+    public Optional<CommentDto> findById(long id) {
         return commentRepository
             .findById(id)
-            .map(commentMapper::toDomain);
+            .map(commentMapper::toDto);
     }
 
     @Override
-    public List<Comment> findAllForBook(long bookId) {
+    public List<CommentDto> findAllForBook(long bookId) {
         return commentRepository
 //            .findAllForBook(bookId)
             .findAllByBookId(bookId)
             .stream()
-            .map(commentMapper::toDomain)
+            .map(commentMapper::toDto)
             .toList();
     }
 
     @Override
-    public Comment save(Comment comment) {
-        ru.otus.hw.models.models.Comment commentEntity = commentRepository.save(commentMapper.toEntity(comment));
-        return commentMapper.toDomain(commentEntity);
+    public CommentDto save(CommentDto commentDto) {
+        ru.otus.hw.models.entity.Comment commentEntity = commentRepository.save(commentMapper.toEntity(commentDto));
+        return commentMapper.toDto(commentEntity);
     }
 
     @Transactional

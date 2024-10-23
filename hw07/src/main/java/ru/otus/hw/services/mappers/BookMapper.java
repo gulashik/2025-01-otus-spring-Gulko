@@ -2,7 +2,8 @@ package ru.otus.hw.services.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.otus.hw.models.models.Book;
+import ru.otus.hw.models.dto.BookDto;
+import ru.otus.hw.models.entity.Book;
 
 @RequiredArgsConstructor
 @Component
@@ -11,15 +12,15 @@ public class BookMapper {
 
     private final GenreMapper genreMapper;
 
-    public ru.otus.hw.models.dto.Book toDomain(Book entity) {
+    public BookDto toDto(Book entity) {
         if (entity == null) {
             return null;
         }
 
-        var author = authorMapper.toDomain(entity.getAuthor());
-        var genre = genreMapper.toDomain(entity.getGenre());
+        var author = authorMapper.toDto(entity.getAuthor());
+        var genre = genreMapper.toDto(entity.getGenre());
 
-        return new ru.otus.hw.models.dto.Book(
+        return new BookDto(
             entity.getId(),
             entity.getTitle(),
             author,
@@ -27,16 +28,16 @@ public class BookMapper {
         );
     }
 
-    public Book toEntity(ru.otus.hw.models.dto.Book domain) {
-        if (domain == null) {
+    public Book toEntity(BookDto dto) {
+        if (dto == null) {
             return null;
         }
-        var authorEntity = authorMapper.toEntity(domain.getAuthor());
-        var genreEntity = genreMapper.toEntity(domain.getGenre());
+        var authorEntity = authorMapper.toEntity(dto.getAuthorDto());
+        var genreEntity = genreMapper.toEntity(dto.getGenreDto());
 
         return new Book(
-            domain.getId(),
-            domain.getTitle(),
+            dto.getId(),
+            dto.getTitle(),
             authorEntity,
             genreEntity
         );

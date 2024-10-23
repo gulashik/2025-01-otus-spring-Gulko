@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.models.dto.Author;
-import ru.otus.hw.models.dto.Book;
-import ru.otus.hw.models.dto.Genre;
+import ru.otus.hw.models.dto.AuthorDto;
+import ru.otus.hw.models.dto.BookDto;
+import ru.otus.hw.models.dto.GenreDto;
 import ru.otus.hw.services.mappers.AuthorMapper;
 import ru.otus.hw.services.mappers.BookMapper;
 import ru.otus.hw.services.mappers.GenreMapper;
@@ -30,7 +30,7 @@ import static ru.otus.hw.objects.TestObjects.*;
         AuthorMapper.class
     }
 )
-class BookServiceImplTest {
+class BookDtoServiceImplTest {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -38,27 +38,27 @@ class BookServiceImplTest {
     @Autowired
     private BookServiceImpl service;
 
-    private final List<Author> dbAuthors = getDbAuthors();
+    private final List<AuthorDto> dbAuthorDtos = getDbAuthors();
 
-    private final List<Genre> dbGenres = getDbGenres();
+    private final List<GenreDto> dbGenreDtos = getDbGenres();
 
-    private final List<Book> dbBooks = getDbBooks();
+    private final List<BookDto> dbBookDtos = getDbBooks();
 
     @DisplayName("должен загружать книгу по id")
     @ParameterizedTest
     @MethodSource("getBooks")
-    void findById(Book expectedBook) {
-        var actualBook = service.findById(expectedBook.getId());
+    void findById(BookDto expectedBookDto) {
+        var actualBook = service.findById(expectedBookDto.getId());
         assertThat(actualBook).isPresent()
             .get()
-            .isEqualTo(expectedBook);
+            .isEqualTo(expectedBookDto);
     }
 
     @DisplayName("должен загружать список всех книг")
     @Test
     void findAll() {
         var actualBooks = service.findAll();
-        var expectedBooks = dbBooks;
+        var expectedBooks = dbBookDtos;
 
         assertThat(actualBooks).containsExactlyElementsOf(expectedBooks);
         actualBooks.forEach(System.out::println);
@@ -67,11 +67,11 @@ class BookServiceImplTest {
     @DisplayName("должен сохранять новую книгу")
     @Test
     void insert() {
-        var expectedBook = new Book(0, "BookTitle_10500", dbAuthors.get(0), dbGenres.get(0));
+        var expectedBook = new BookDto(0, "BookTitle_10500", dbAuthorDtos.get(0), dbGenreDtos.get(0));
         var returnedBook = service.insert(
             expectedBook.getTitle(),
-            expectedBook.getAuthor().getId(),
-            expectedBook.getGenre().getId()
+            expectedBook.getAuthorDto().getId(),
+            expectedBook.getGenreDto().getId()
         );
 
         assertThat(returnedBook).isNotNull()
@@ -90,7 +90,7 @@ class BookServiceImplTest {
     @DisplayName("должен сохранять измененную книгу")
     @Test
     void update() {
-        var expectedBook = new Book(1L, "BookTitle_10500", dbAuthors.get(2), dbGenres.get(2));
+        var expectedBook = new BookDto(1L, "BookTitle_10500", dbAuthorDtos.get(2), dbGenreDtos.get(2));
 
         assertThat(service.findById(expectedBook.getId()))
             .isPresent()
@@ -100,8 +100,8 @@ class BookServiceImplTest {
         var returnedBook = service.update(
             expectedBook.getId(),
             expectedBook.getTitle(),
-            expectedBook.getAuthor().getId(),
-            expectedBook.getGenre().getId()
+            expectedBook.getAuthorDto().getId(),
+            expectedBook.getGenreDto().getId()
         );
 
         assertThat(returnedBook).isNotNull()
@@ -126,7 +126,7 @@ class BookServiceImplTest {
         assertThat(service.findById(id)).isEmpty();
     }
 
-    public static List<Book> getBooks() {
+    public static List<BookDto> getBooks() {
         return getDbBooks();
     }
 }

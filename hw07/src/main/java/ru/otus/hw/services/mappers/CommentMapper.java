@@ -2,7 +2,8 @@ package ru.otus.hw.services.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.otus.hw.models.models.Comment;
+import ru.otus.hw.models.dto.CommentDto;
+import ru.otus.hw.models.entity.Comment;
 
 @RequiredArgsConstructor
 @Component
@@ -10,25 +11,25 @@ public class CommentMapper {
 
     private final BookMapper bookMapper;
 
-    public ru.otus.hw.models.dto.Comment toDomain(Comment entity) {
+    public CommentDto toDto(Comment entity) {
         if (entity == null) {
             return null;
         }
-        return new ru.otus.hw.models.dto.Comment(
+        return new CommentDto(
             entity.getId(),
             entity.getText(),
-            bookMapper.toDomain(entity.getBook())
+            bookMapper.toDto(entity.getBook())
         );
     }
 
-    public Comment toEntity(ru.otus.hw.models.dto.Comment domain) {
-        if (domain == null) {
+    public Comment toEntity(CommentDto dto) {
+        if (dto == null) {
             return null;
         }
         return new Comment(
-            domain.getId(),
-            domain.getText(),
-            bookMapper.toEntity(domain.getBook())
+            dto.getId(),
+            dto.getText(),
+            bookMapper.toEntity(dto.getBookDto())
         );
     }
 }

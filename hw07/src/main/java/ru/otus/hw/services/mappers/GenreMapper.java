@@ -1,23 +1,24 @@
 package ru.otus.hw.services.mappers;
 
 import org.springframework.stereotype.Component;
-import ru.otus.hw.models.models.Genre;
+import ru.otus.hw.models.dto.GenreDto;
+import ru.otus.hw.models.entity.Genre;
 
 @Component
 public class GenreMapper {
-    public ru.otus.hw.models.dto.Genre toDomain(Genre entity) {
+    public GenreDto toDto(Genre entity) {
         if (entity == null) {
             return null;
         }
 
-        return new ru.otus.hw.models.dto.Genre(entity.getId(), entity.getName());
+        return new GenreDto(entity.getId(), entity.getName());
     }
 
-    public Genre toEntity(ru.otus.hw.models.dto.Genre domain) {
-        if (domain == null) {
+    public Genre toEntity(GenreDto dto) {
+        if (dto == null) {
             return null;
         }
 
-        return new Genre(domain.getId(), domain.getName());
+        return new Genre(dto.getId(), dto.getName());
     }
 }
