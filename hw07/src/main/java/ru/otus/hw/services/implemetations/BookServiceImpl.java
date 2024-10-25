@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.dto.BookDto;
+import ru.otus.hw.models.entity.Author;
+import ru.otus.hw.models.entity.Book;
+import ru.otus.hw.models.entity.Genre;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
@@ -58,8 +61,24 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public BookDto update(long id, String title, long authorId, long genreId) {
-        findById(id).orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " not found"));
-        return save(id, title, authorId, genreId);
+
+        Book book = bookRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " not found"));
+
+        Author author = authorRepository
+            .findById(authorId)
+            .orElseThrow(() -> new EntityNotFoundException("Author with id " + authorId + " not found"));
+
+        Genre genre = genreRepository
+            .findById(genreId)
+            .orElseThrow(() -> new EntityNotFoundException("Genre with id " + genreId + " not found"));
+
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setGenre(genre);
+
+        return bookMapper.toDto(book);
     }
 
     @Transactional
