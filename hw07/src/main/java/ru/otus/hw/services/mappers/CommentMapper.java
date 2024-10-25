@@ -12,9 +12,6 @@ public class CommentMapper {
     private final BookMapper bookMapper;
 
     public CommentDto toDto(Comment entity) {
-        if (entity == null) {
-            return null;
-        }
         return new CommentDto(
             entity.getId(),
             entity.getText(),
@@ -23,9 +20,6 @@ public class CommentMapper {
     }
 
     public Comment toEntity(CommentDto dto) {
-        if (dto == null) {
-            return null;
-        }
         return new Comment(
             dto.getId(),
             dto.getText(),
