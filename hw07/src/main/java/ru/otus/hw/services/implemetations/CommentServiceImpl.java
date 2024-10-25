@@ -51,6 +51,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Transactional
+    @Override
     public CommentDto update(long id, String text) {
         Comment comment = commentRepository
             .findById(id)
@@ -62,6 +63,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Transactional
+    @Override
     public CommentDto create(Long bookId, String text) {
         Book book = bookRepository.findById(bookId)
             .orElseThrow(() -> new EntityNotFoundException("Book with id " + bookId + " not found"));

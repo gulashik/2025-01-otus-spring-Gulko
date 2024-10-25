@@ -12,5 +12,9 @@ public interface CommentService {
 
     CommentDto save(CommentDto commentDto);
 
+    CommentDto update(long id, String text);
+
+    CommentDto create(Long bookId, String text);
+
     void deleteById(long id);
 }
