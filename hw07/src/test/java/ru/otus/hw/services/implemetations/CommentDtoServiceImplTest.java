@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.dto.BookDto;
 import ru.otus.hw.models.dto.CommentDto;
+import ru.otus.hw.repositories.CommentRepository;
 import ru.otus.hw.services.mappers.AuthorMapper;
 import ru.otus.hw.services.mappers.BookMapper;
 import ru.otus.hw.services.mappers.CommentMapper;
@@ -24,7 +25,7 @@ import static ru.otus.hw.objects.TestObjects.getDbComments;
 @Import(
     {
         CommentServiceImpl.class, CommentMapper.class,
-        BookMapper.class,
+        BookServiceImpl.class, BookMapper.class,
         AuthorMapper.class,
         GenreMapper.class
     }
@@ -75,6 +76,32 @@ class CommentDtoServiceImplTest {
         expectedComment = service.save(expectedComment);
 
         entityManager.clear();
+        var actualComment = service.findById(expectedComment.getId());
+
+        assertThat(actualComment).isPresent().get().isEqualTo(expectedComment);
+    }
+
+    @DisplayName("должен обновить комментарий")
+    @Test
+    void update() {
+        var expectedComment = dbCommentDtos.get(0);
+        expectedComment.setText("-");
+
+        service.update(expectedComment.getId(), expectedComment.getText());
+        entityManager.flush();
+        var actualComment = service.findById(expectedComment.getId()).get();
+
+
+        assertThat(actualComment).isEqualTo(expectedComment);
+    }
+
+    @DisplayName("должен создать комментарий")
+    @Test
+    void create() {
+        var expectedComment = new CommentDto(0, "new", getDbBooks().get(0));
+
+        expectedComment = service.create(expectedComment.getBookDto().getId(), expectedComment.getText());
+
         var actualComment = service.findById(expectedComment.getId());
 
         assertThat(actualComment).isPresent().get().isEqualTo(expectedComment);
