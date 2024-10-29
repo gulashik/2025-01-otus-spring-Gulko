@@ -10,7 +10,6 @@ import ru.otus.hw.models.entity.Comment;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
 import ru.otus.hw.services.CommentService;
-import ru.otus.hw.services.mappers.BookMapper;
 import ru.otus.hw.services.mappers.CommentMapper;
 
 import java.util.List;
@@ -25,8 +24,6 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     private final BookRepository bookRepository;
-
-    private final BookMapper bookMapper;
 
     @Override
     public Optional<CommentDto> findById(long id) {
@@ -55,11 +52,13 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto update(long id, String text) {
         Comment comment = commentRepository
             .findById(id)
-            .get();
+            .orElseThrow(() -> new EntityNotFoundException("Comment with id " + id + " not found"));
 
         comment.setText(text);
 
-        return commentMapper.toDto(comment);
+        return commentMapper.toDto(
+            commentRepository.save(comment)
+        );
     }
 
     @Transactional
@@ -68,9 +67,11 @@ public class CommentServiceImpl implements CommentService {
         Book book = bookRepository.findById(bookId)
             .orElseThrow(() -> new EntityNotFoundException("Book with id " + bookId + " not found"));
 
-        CommentDto commentDto = new CommentDto(0L, text, bookMapper.toDto(book));
+        Comment comment = commentRepository.save(
+            new Comment(0L, text, book)
+        );
 
-        return save(commentDto);
+        return commentMapper.toDto(comment);
     }
 
     @Transactional
