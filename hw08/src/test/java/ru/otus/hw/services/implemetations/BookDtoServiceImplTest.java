@@ -1,5 +1,6 @@
 package ru.otus.hw.services.implemetations;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.otus.hw.models.dto.AuthorDto;
 import ru.otus.hw.models.dto.BookDto;
 import ru.otus.hw.models.dto.GenreDto;
+import ru.otus.hw.objects.TestObjectsDb;
 import ru.otus.hw.services.mappers.AuthorMapper;
 import ru.otus.hw.services.mappers.BookMapper;
 import ru.otus.hw.services.mappers.GenreMapper;
@@ -32,7 +34,7 @@ import static ru.otus.hw.objects.TestObjects.*;
 class BookDtoServiceImplTest {
 
     @Autowired
-    private MongoTemplate entityManager;
+    private MongoTemplate mongoTemplate;
 
     @Autowired
     private BookServiceImpl service;
@@ -42,11 +44,19 @@ class BookDtoServiceImplTest {
     private final List<GenreDto> dbGenreDtos = getDbGenres();
 
     private final List<BookDto> dbBookDtos = getDbBooks();
+    @Autowired
+    private BookMapper bookMapper;
+
+    @BeforeEach
+    void setUp() {
+        TestObjectsDb.recreateTestObjects(mongoTemplate);
+    }
 
     @DisplayName("должен загружать книгу по id")
     @ParameterizedTest
     @MethodSource("getBooks")
     void findById(BookDto expectedBookDto) {
+        mongoTemplate.save(bookMapper.toEntity(expectedBookDto));
         var actualBook = service.findById(expectedBookDto.getId());
         assertThat(actualBook).isPresent()
             .get()

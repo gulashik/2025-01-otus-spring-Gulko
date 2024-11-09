@@ -14,8 +14,8 @@ de:
 
 mongock:
   change-logs-scan-package:
-    - ru.otus.hw.objects.mongock.changelog
+    - xxx
   mongo-db:
     write-concern:
-      journal: false # todo нужно для тестов
+      journal: false
     read-concern: local

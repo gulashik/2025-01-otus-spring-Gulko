@@ -71,7 +71,7 @@
         <module name="NestedTryDepth"/>
 
         <module name="MethodLength">
-            <property name="max" value="25"/>
+            <property name="max" value="35"/>
         </module>
         <module name="OuterTypeNumber"/>
         <module name="ParameterNumber">

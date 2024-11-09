@@ -23,7 +23,7 @@ public class DatabaseChangelog {
     }
 
     @ChangeSet(order = "002", id = "insert", author = "gulash")
-    public void insertPushkin(
+    public void insertInit(
         AuthorRepository authorRepository,
         GenreRepository genreRepository,
         BookRepository bookRepository,
@@ -44,15 +44,15 @@ public class DatabaseChangelog {
         Book book3 = new Book("3", "BookTitle_3", author3, genre3);
         bookRepository.saveAll(List.of(book1, book2, book3));
 
-        Comment comment_1_book_1 = new Comment("1", "Comment_1_book_1", book1);
-        Comment comment_2_book_1 = new Comment("2", "Comment_2_book_1", book1);
-        Comment comment_3_book_1 = new Comment("3", "Comment_2_book_1", book1);
-        Comment comment_1_book_2 = new Comment("1", "Comment_1_book_2", book2);
-        Comment comment_2_book_2 = new Comment("2", "Comment_2_book_2", book2);
+        Comment comment1Book1 = new Comment("1", "Comment_1_book_1", book1);
+        Comment comment2Book1 = new Comment("2", "Comment_2_book_1", book1);
+        Comment comment2Book11 = new Comment("3", "Comment_2_book_1", book1);
+        Comment comment1Book2 = new Comment("1", "Comment_1_book_2", book2);
+        Comment comment2Book2 = new Comment("2", "Comment_2_book_2", book2);
         commentRepository.saveAll(
             List.of(
-                comment_1_book_1, comment_2_book_1, comment_3_book_1,
-                comment_1_book_2, comment_2_book_2
+                comment1Book1, comment2Book1, comment2Book11,
+                comment1Book2, comment2Book2
             )
         );
     }
