@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public BookDto insert(String title, String authorId, String genreId) {
-        return save("0", title, authorId, genreId);
+        return save(null, title, authorId, genreId);
     }
 
     @Transactional
@@ -78,7 +78,8 @@ public class BookServiceImpl implements BookService {
         book.setAuthor(author);
         book.setGenre(genre);
 
-        return bookMapper.toDto(book);
+        Book saved = bookRepository.save(book);
+        return bookMapper.toDto(saved);
     }
 
     @Transactional
@@ -90,9 +91,9 @@ public class BookServiceImpl implements BookService {
 
     private BookDto save(String id, String title, String authorId, String genreId) {
         var author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
+                .orElseThrow(() -> new EntityNotFoundException("Author with id %s not found".formatted(authorId)));
         var genre = genreRepository.findById(genreId)
-                .orElseThrow(() -> new EntityNotFoundException("Genre with id %d not found".formatted(genreId)));
+                .orElseThrow(() -> new EntityNotFoundException("Genre with id %s not found".formatted(genreId)));
         var book = new BookDto(id, title, authorMapper.toDto(author), genreMapper.toDto(genre));
         var savedBook = bookRepository.save(bookMapper.toEntity(book));
         return bookMapper.toDto(savedBook);
