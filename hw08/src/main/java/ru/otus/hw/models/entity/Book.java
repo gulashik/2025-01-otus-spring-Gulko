@@ -19,6 +19,5 @@ public class Book {
     @DBRef
     private Author author;
 
-    @DBRef
     private Genre genre;
 }
