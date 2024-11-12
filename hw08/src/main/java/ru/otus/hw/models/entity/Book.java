@@ -2,7 +2,6 @@ package ru.otus.hw.models.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
@@ -16,7 +15,6 @@ public class Book {
 
     private String title;
 
-    @DBRef
     private Author author;
 
     private Genre genre;
