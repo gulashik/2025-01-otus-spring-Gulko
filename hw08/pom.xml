@@ -22,6 +22,7 @@
         <mongock.version>4.3.8</mongock.version>
         <flapdoodle.version>4.6.1</flapdoodle.version>
         <reflections.version>0.10.2</reflections.version>
+        <annotation.version>24.0.1</annotation.version>
         <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
         <checkstyle.version>10.15.0</checkstyle.version>
         <checkstyle.config.url>
@@ -79,15 +80,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
-            <version>${kotlin.version}</version>
-            <scope>test</scope>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${annotation.version}</version>
         </dependency>
     </dependencies>
 
