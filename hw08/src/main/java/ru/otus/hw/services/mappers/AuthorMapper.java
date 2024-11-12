@@ -7,6 +7,9 @@ import ru.otus.hw.models.entity.Author;
 @Component
 public class AuthorMapper {
     public AuthorDto toDto(Author entity) {
+        if (entity == null) {
+            return null;
+        }
         return new AuthorDto(entity.getId(), entity.getFullName());
     }
 

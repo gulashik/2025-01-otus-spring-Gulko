@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.dto.BookDto;
+import ru.otus.hw.models.dto.CommentDto;
 import ru.otus.hw.models.entity.Author;
 import ru.otus.hw.models.entity.Book;
 import ru.otus.hw.models.entity.Genre;
@@ -12,6 +13,7 @@ import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
 import ru.otus.hw.services.BookService;
+import ru.otus.hw.services.CommentService;
 import ru.otus.hw.services.mappers.AuthorMapper;
 import ru.otus.hw.services.mappers.BookMapper;
 import ru.otus.hw.services.mappers.GenreMapper;
@@ -27,6 +29,8 @@ public class BookServiceImpl implements BookService {
     private final GenreRepository genreRepository;
 
     private final BookRepository bookRepository;
+
+    private final CommentService commentService;
 
     private final BookMapper bookMapper;
 
@@ -84,6 +88,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteById(String id) {
         bookRepository.deleteById(id);
+        commentService.findAllForBook(id)
+            .stream()
+            .map(CommentDto::getId)
+            .forEach(commentService::deleteById);
     }
 
 

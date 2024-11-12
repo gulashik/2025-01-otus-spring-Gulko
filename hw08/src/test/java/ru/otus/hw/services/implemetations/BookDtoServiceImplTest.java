@@ -15,6 +15,7 @@ import ru.otus.hw.models.dto.GenreDto;
 import ru.otus.hw.objects.TestObjectsDb;
 import ru.otus.hw.services.mappers.AuthorMapper;
 import ru.otus.hw.services.mappers.BookMapper;
+import ru.otus.hw.services.mappers.CommentMapper;
 import ru.otus.hw.services.mappers.GenreMapper;
 
 import java.util.List;
@@ -27,6 +28,7 @@ import static ru.otus.hw.objects.TestObjects.*;
 @Import(
     {
         BookServiceImpl.class, BookMapper.class,
+        CommentServiceImpl.class, CommentMapper.class,
         GenreMapper.class,
         AuthorMapper.class
     }
@@ -37,7 +39,10 @@ class BookDtoServiceImplTest {
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private BookServiceImpl service;
+    private BookServiceImpl bookService;
+
+    @Autowired
+    private CommentServiceImpl commentService;
 
     private final List<AuthorDto> dbAuthorDtos = getDbAuthors();
 
@@ -57,7 +62,7 @@ class BookDtoServiceImplTest {
     @MethodSource("getBooks")
     void findById(BookDto expectedBookDto) {
         mongoTemplate.save(bookMapper.toEntity(expectedBookDto));
-        var actualBook = service.findById(expectedBookDto.getId());
+        var actualBook = bookService.findById(expectedBookDto.getId());
         assertThat(actualBook).isPresent()
             .get()
             .isEqualTo(expectedBookDto);
@@ -66,7 +71,7 @@ class BookDtoServiceImplTest {
     @DisplayName("должен загружать список всех книг")
     @Test
     void findAll() {
-        var actualBooks = service.findAll();
+        var actualBooks = bookService.findAll();
         var expectedBooks = dbBookDtos;
 
         assertThat(actualBooks).containsExactlyElementsOf(expectedBooks);
@@ -77,7 +82,7 @@ class BookDtoServiceImplTest {
     @Test
     void insert() {
         var expectedBook = new BookDto(null, "BookTitle_10500", dbAuthorDtos.get(0), dbGenreDtos.get(0));
-        var returnedBook = service.insert(
+        var returnedBook = bookService.insert(
             expectedBook.getTitle(),
             expectedBook.getAuthorDto().getId(),
             expectedBook.getGenreDto().getId()
@@ -89,7 +94,7 @@ class BookDtoServiceImplTest {
             .ignoringFields("id")
             .isEqualTo(expectedBook);
 
-        assertThat(service.findById(returnedBook.getId()))
+        assertThat(bookService.findById(returnedBook.getId()))
             .isPresent()
             .get()
             .isEqualTo(returnedBook);
@@ -100,12 +105,12 @@ class BookDtoServiceImplTest {
     void update() {
         var expectedBook = new BookDto("1", "BookTitle_10500", dbAuthorDtos.get(2), dbGenreDtos.get(2));
 
-        assertThat(service.findById(expectedBook.getId()))
+        assertThat(bookService.findById(expectedBook.getId()))
             .isPresent()
             .get()
             .isNotEqualTo(expectedBook);
 
-        var returnedBook = service.update(
+        var returnedBook = bookService.update(
             expectedBook.getId(),
             expectedBook.getTitle(),
             expectedBook.getAuthorDto().getId(),
@@ -115,7 +120,7 @@ class BookDtoServiceImplTest {
         assertThat(returnedBook).isNotNull()
             .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
 
-        assertThat(service.findById(returnedBook.getId()))
+        assertThat(bookService.findById(returnedBook.getId()))
             .isPresent()
             .get()
             .isEqualTo(returnedBook);
@@ -125,11 +130,13 @@ class BookDtoServiceImplTest {
     @Test
     void deleteById() {
         var id = "1";
-        assertThat(service.findById(id)).isPresent();
+        assertThat(bookService.findById(id)).isPresent();
 
-        service.deleteById(id);
+        bookService.deleteById(id);
 
-        assertThat(service.findById(id)).isEmpty();
+        assertThat(bookService.findById(id)).isEmpty();
+
+        assertThat(commentService.findAllForBook(id)).isEmpty();
     }
 
     public static List<BookDto> getBooks() {
