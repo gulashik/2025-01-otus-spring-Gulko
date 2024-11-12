@@ -1,8 +1,8 @@
 package ru.otus.hw.models.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Getter
 @Setter
@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @AllArgsConstructor
 @Document(collection = "genres")
 public class Genre {
-    @MongoId
+    @Id
     private String id;
 
     private String name;

@@ -1,10 +1,9 @@
 package ru.otus.hw.models.entity;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Getter
 @Setter
@@ -12,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @AllArgsConstructor
 @Document(collection = "authors")
 public class Author {
-    @MongoId
+    @Id
     private String id;
 
     @Field(name = "full_name")
