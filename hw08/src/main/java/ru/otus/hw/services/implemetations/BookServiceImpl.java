@@ -34,7 +34,6 @@ public class BookServiceImpl implements BookService {
 
     private final GenreMapper genreMapper;
 
-    @Transactional
     @Override
     public Optional<BookDto> findById(String id) {
         return bookRepository
@@ -42,7 +41,6 @@ public class BookServiceImpl implements BookService {
             .map(bookMapper::toDto);
     }
 
-    @Transactional
     @Override
     public List<BookDto> findAll() {
         return bookRepository
