@@ -1,5 +1,6 @@
 package ru.otus.hw.services;
 
+import ru.otus.hw.models.dto.BookCreateDto;
 import ru.otus.hw.models.dto.BookDto;
 import ru.otus.hw.models.dto.BookUpdateDto;
 
@@ -11,7 +12,7 @@ public interface BookService {
 
     List<BookDto> findAll();
 
-    BookDto insert(String title, long authorId, long genreId);
+    BookDto insert(BookCreateDto bookCreateDto);
 
     BookDto update(BookUpdateDto bookUpdateDto);
 

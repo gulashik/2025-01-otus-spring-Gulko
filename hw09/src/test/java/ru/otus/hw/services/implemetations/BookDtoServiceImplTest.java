@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.models.dto.AuthorDto;
-import ru.otus.hw.models.dto.BookDto;
-import ru.otus.hw.models.dto.BookUpdateDto;
-import ru.otus.hw.models.dto.GenreDto;
+import ru.otus.hw.models.dto.*;
 import ru.otus.hw.services.mappers.AuthorMapper;
 import ru.otus.hw.services.mappers.BookMapper;
 import ru.otus.hw.services.mappers.GenreMapper;
@@ -70,9 +67,11 @@ class BookDtoServiceImplTest {
     void insert() {
         var expectedBook = new BookDto(0, "BookTitle_10500", dbAuthorDtos.get(0), dbGenreDtos.get(0));
         var returnedBook = service.insert(
-            expectedBook.getTitle(),
-            expectedBook.getAuthorDto().getId(),
-            expectedBook.getGenreDto().getId()
+            new BookCreateDto(
+                expectedBook.getTitle(),
+                expectedBook.getAuthorDto().getId(),
+                expectedBook.getGenreDto().getId()
+            )
         );
 
         assertThat(returnedBook).isNotNull()

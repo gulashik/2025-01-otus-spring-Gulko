@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.models.dto.BookCreateDto;
 import ru.otus.hw.models.dto.BookDto;
 import ru.otus.hw.models.dto.BookUpdateDto;
 import ru.otus.hw.services.BookService;
@@ -34,18 +35,14 @@ public class BookController {
     }
 
     @GetMapping("/add")
-    public String addBook(Model model) {
+    public String createBook(Model model) {
         model.addAttribute("book", new BookUpdateDto(0L, "some title", 1, 1));
         return "add";
     }
 
     @PostMapping("/add")
-    public String addBook(@ModelAttribute("book") BookUpdateDto book) {
-        bookService.insert(
-            book.getTitle(),
-            book.getAuthorId(),
-            book.getGenreId()
-        );
+    public String createBook(@ModelAttribute("book") BookCreateDto book) {
+        bookService.insert(book);
         return "redirect:/";
     }
 
