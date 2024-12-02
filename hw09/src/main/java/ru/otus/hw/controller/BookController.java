@@ -36,7 +36,7 @@ public class BookController {
 
     @GetMapping("/add")
     public String createBook(Model model) {
-        model.addAttribute("book", new BookUpdateDto(0L, "some title", 1, 1));
+        model.addAttribute("book", new BookUpdateDto(0L, "some title", 1l, 1l));
         return "add";
     }
 

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class BookCreateDto {
     private String title;
 
-    private long authorId;
+    private Long authorId;
 
-    private long genreId;
+    private Long genreId;
 }
