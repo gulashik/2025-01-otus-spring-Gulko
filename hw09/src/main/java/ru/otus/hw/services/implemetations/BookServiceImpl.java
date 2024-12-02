@@ -35,7 +35,7 @@ public class BookServiceImpl implements BookService {
 
     private final GenreMapper genreMapper;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<BookDto> findById(long id) {
         return bookRepository
