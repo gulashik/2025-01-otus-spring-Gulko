@@ -3,7 +3,7 @@ package ru.otus.hw.services.implemetations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.dto.BookCreateDto;
 import ru.otus.hw.models.dto.BookDto;
 import ru.otus.hw.models.dto.BookUpdateDto;
@@ -70,15 +70,15 @@ public class BookServiceImpl implements BookService {
 
         Book book = bookRepository
             .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " not found"));
+            .orElseThrow(() -> new NotFoundException("Book with id " + id + " not found"));
 
         Author author = authorRepository
             .findById(authorId)
-            .orElseThrow(() -> new EntityNotFoundException("Author with id " + authorId + " not found"));
+            .orElseThrow(() -> new NotFoundException("Author with id " + authorId + " not found"));
 
         Genre genre = genreRepository
             .findById(genreId)
-            .orElseThrow(() -> new EntityNotFoundException("Genre with id " + genreId + " not found"));
+            .orElseThrow(() -> new NotFoundException("Genre with id " + genreId + " not found"));
 
         book.setTitle(title);
         book.setAuthor(author);
@@ -96,9 +96,9 @@ public class BookServiceImpl implements BookService {
 
     private BookDto save(long id, String title, long authorId, long genreId) {
         var author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
+                .orElseThrow(() -> new NotFoundException("Author with id %d not found".formatted(authorId)));
         var genre = genreRepository.findById(genreId)
-                .orElseThrow(() -> new EntityNotFoundException("Genre with id %d not found".formatted(genreId)));
+                .orElseThrow(() -> new NotFoundException("Genre with id %d not found".formatted(genreId)));
         var book = new BookDto(id, title, authorMapper.toDto(author), genreMapper.toDto(genre));
         var savedBook = bookRepository.save(bookMapper.toEntity(book));
         return bookMapper.toDto(savedBook);
