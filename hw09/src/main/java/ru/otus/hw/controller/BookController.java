@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.dto.BookDto;
-import ru.otus.hw.models.dto.BookPostDto;
+import ru.otus.hw.models.dto.BookUpdateDto;
 import ru.otus.hw.services.BookService;
 
 @Controller
@@ -28,24 +28,19 @@ public class BookController {
     }
 
     @PostMapping("/edit")
-    public String editBook(@ModelAttribute("book") BookPostDto book) {
-        bookService.update(
-            book.getId(),
-            book.getTitle(),
-            book.getAuthorId(),
-            book.getGenreId()
-        );
+    public String editBook(@ModelAttribute("book") BookUpdateDto book) {
+        bookService.update(book);
         return "redirect:/";
     }
 
     @GetMapping("/add")
     public String addBook(Model model) {
-        model.addAttribute("book", new BookPostDto(0L, "some title", 1, 1));
+        model.addAttribute("book", new BookUpdateDto(0L, "some title", 1, 1));
         return "add";
     }
 
     @PostMapping("/add")
-    public String addBook(@ModelAttribute("book") BookPostDto book) {
+    public String addBook(@ModelAttribute("book") BookUpdateDto book) {
         bookService.insert(
             book.getTitle(),
             book.getAuthorId(),

@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.dto.AuthorDto;
 import ru.otus.hw.models.dto.BookDto;
+import ru.otus.hw.models.dto.BookUpdateDto;
 import ru.otus.hw.models.dto.GenreDto;
 import ru.otus.hw.services.mappers.AuthorMapper;
 import ru.otus.hw.services.mappers.BookMapper;
@@ -98,10 +99,12 @@ class BookDtoServiceImplTest {
             .isNotEqualTo(expectedBook);
 
         var returnedBook = service.update(
-            expectedBook.getId(),
-            expectedBook.getTitle(),
-            expectedBook.getAuthorDto().getId(),
-            expectedBook.getGenreDto().getId()
+            new BookUpdateDto(
+                expectedBook.getId(),
+                expectedBook.getTitle(),
+                expectedBook.getAuthorDto().getId(),
+                expectedBook.getGenreDto().getId()
+            )
         );
 
         assertThat(returnedBook).isNotNull()

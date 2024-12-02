@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.dto.BookDto;
+import ru.otus.hw.models.dto.BookUpdateDto;
 import ru.otus.hw.models.entity.Author;
 import ru.otus.hw.models.entity.Book;
 import ru.otus.hw.models.entity.Genre;
@@ -60,7 +61,11 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public BookDto update(long id, String title, long authorId, long genreId) {
+    public BookDto update(BookUpdateDto bookUpdateDto) {
+        long id = bookUpdateDto.getId();
+        String title = bookUpdateDto.getTitle();
+        long authorId = bookUpdateDto.getAuthorId();
+        long genreId = bookUpdateDto.getGenreId();
 
         Book book = bookRepository
             .findById(id)
