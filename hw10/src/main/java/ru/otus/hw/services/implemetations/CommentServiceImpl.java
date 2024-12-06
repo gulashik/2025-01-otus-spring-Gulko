@@ -3,7 +3,7 @@ package ru.otus.hw.services.implemetations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.dto.CommentDto;
 import ru.otus.hw.models.entity.Book;
 import ru.otus.hw.models.entity.Comment;
@@ -52,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto update(long id, String text) {
         Comment comment = commentRepository
             .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Comment with id " + id + " not found"));
+            .orElseThrow(() -> new NotFoundException("Comment with id " + id + " not found"));
 
         comment.setText(text);
 
@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto create(Long bookId, String text) {
         Book book = bookRepository.findById(bookId)
-            .orElseThrow(() -> new EntityNotFoundException("Book with id " + bookId + " not found"));
+            .orElseThrow(() -> new NotFoundException("Book with id " + bookId + " not found"));
 
         Comment comment = commentRepository.save(
             new Comment(0L, text, book)
