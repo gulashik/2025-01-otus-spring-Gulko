@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
-    Optional<BookDto> findById(long id);
+    Optional<BookDto> findById(Long id);
 
     List<BookDto> findAll();
 
-    BookDto insert(String title, long authorId, long genreId);
+    BookDto insert(String title, Long authorId, Long genreId);
 
-    BookDto update(long id, String title, long authorId, long genreId);
+    BookDto update(Long id, String title, Long authorId, Long genreId);
 
-    void deleteById(long id);
+    void deleteById(Long id);
 }

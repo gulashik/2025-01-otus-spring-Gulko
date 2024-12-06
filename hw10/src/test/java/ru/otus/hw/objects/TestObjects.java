@@ -8,26 +8,26 @@ import ru.otus.hw.models.dto.GenreDto;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 public class TestObjects {
 
 
     public static List<AuthorDto> getDbAuthors() {
-        return IntStream.range(1, 4).boxed()
+        return LongStream.range(1, 4).boxed()
             .map(id -> new AuthorDto(id, "Author_" + id))
             .toList();
     }
 
     public static List<GenreDto> getDbGenres() {
-        return IntStream.range(1, 4).boxed()
+        return LongStream.range(1, 4).boxed()
             .map(id -> new GenreDto(id, "Genre_" + id))
             .toList();
     }
 
     public static List<BookDto> getDbBooks(List<AuthorDto> dbAuthorDtos, List<GenreDto> dbGenreDtos) {
-        return IntStream.range(1, 4).boxed()
-            .map(id -> new BookDto(id, "BookTitle_" + id, dbAuthorDtos.get(id - 1), dbGenreDtos.get(id - 1)))
+        return LongStream.range(1, 4).boxed()
+            .map(id -> new BookDto(id, "BookTitle_" + id, dbAuthorDtos.get(id.intValue() - 1), dbGenreDtos.get(id.intValue() - 1)))
             .toList();
     }
 

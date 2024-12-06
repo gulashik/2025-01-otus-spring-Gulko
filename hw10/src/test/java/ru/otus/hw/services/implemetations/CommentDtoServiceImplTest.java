@@ -97,7 +97,7 @@ class CommentDtoServiceImplTest {
     @DisplayName("должен создать комментарий")
     @Test
     void create() {
-        var expectedComment = new CommentDto(0, "new", getDbBooks().get(0));
+        var expectedComment = new CommentDto(0l, "new", getDbBooks().get(0));
 
         expectedComment = service.create(expectedComment.getBookDto().getId(), expectedComment.getText());
 

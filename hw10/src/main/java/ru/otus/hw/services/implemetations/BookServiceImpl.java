@@ -36,7 +36,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public Optional<BookDto> findById(long id) {
+    public Optional<BookDto> findById(Long id) {
         return bookRepository
             .findById(id)
             .map(bookMapper::toDto);
@@ -54,13 +54,13 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public BookDto insert(String title, long authorId, long genreId) {
-        return save(0, title, authorId, genreId);
+    public BookDto insert(String title, Long authorId, Long genreId) {
+        return save(0L, title, authorId, genreId);
     }
 
     @Transactional
     @Override
-    public BookDto update(long id, String title, long authorId, long genreId) {
+    public BookDto update(Long id, String title, Long authorId, Long genreId) {
 
         Book book = bookRepository
             .findById(id)
@@ -83,12 +83,12 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void deleteById(long id) {
+    public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }
 
 
-    private BookDto save(long id, String title, long authorId, long genreId) {
+    private BookDto save(Long id, String title, Long authorId, Long genreId) {
         var author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new NotFoundException("Author with id %d not found".formatted(authorId)));
         var genre = genreRepository.findById(genreId)

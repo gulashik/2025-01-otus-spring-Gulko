@@ -26,14 +26,14 @@ public class CommentServiceImpl implements CommentService {
     private final BookRepository bookRepository;
 
     @Override
-    public Optional<CommentDto> findById(long id) {
+    public Optional<CommentDto> findById(Long id) {
         return commentRepository
             .findById(id)
             .map(commentMapper::toDto);
     }
 
     @Override
-    public List<CommentDto> findAllForBook(long bookId) {
+    public List<CommentDto> findAllForBook(Long bookId) {
         return commentRepository
             .findAllByBookId(bookId)
             .stream()
@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public CommentDto update(long id, String text) {
+    public CommentDto update(Long id, String text) {
         Comment comment = commentRepository
             .findById(id)
             .orElseThrow(() -> new NotFoundException("Comment with id " + id + " not found"));
@@ -76,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void deleteById(long id) {
+    public void deleteById(Long id) {
         commentRepository.deleteById(id);
     }
 }

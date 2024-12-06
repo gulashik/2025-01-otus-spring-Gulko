@@ -67,7 +67,7 @@ class BookDtoServiceImplTest {
     @DisplayName("должен сохранять новую книгу")
     @Test
     void insert() {
-        var expectedBook = new BookDto(0, "BookTitle_10500", dbAuthorDtos.get(0), dbGenreDtos.get(0));
+        var expectedBook = new BookDto(0l, "BookTitle_10500", dbAuthorDtos.get(0), dbGenreDtos.get(0));
         var returnedBook = service.insert(
             expectedBook.getTitle(),
             expectedBook.getAuthorDto().getId(),
