@@ -33,7 +33,7 @@ public class BookServiceImpl implements BookService {
 
     private final GenreMapper genreMapper;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public BookDto findById(Long id) {
         return bookRepository
@@ -42,7 +42,7 @@ public class BookServiceImpl implements BookService {
             .orElseThrow(() -> new NotFoundException("No book"));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<BookDto> findAll() {
         return bookRepository
