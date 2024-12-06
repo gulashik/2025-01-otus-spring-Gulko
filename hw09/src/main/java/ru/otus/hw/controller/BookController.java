@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.dto.BookCreateDto;
 import ru.otus.hw.models.dto.BookDto;
 import ru.otus.hw.models.dto.BookUpdateDto;
@@ -23,7 +22,7 @@ public class BookController {
 
     @GetMapping("/edit")
     public String editBook(@RequestParam("id") Integer id, Model model) {
-        BookDto byId = bookService.findById(id).orElseThrow(() -> new NotFoundException("No book"));
+        BookDto byId = bookService.findById(id);
         model.addAttribute("book", byId);
         return "edit";
     }

@@ -11,7 +11,6 @@ import ru.otus.hw.models.dto.BookDto;
 import ru.otus.hw.services.BookService;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -53,7 +52,7 @@ class BookControllerTest {
     void editBook() throws Exception {
         BookDto expectedBook = dbBookDtos.get(0);
 
-        when(bookService.findById(expectedBook.getId())).thenReturn(Optional.of(expectedBook));
+        when(bookService.findById(expectedBook.getId())).thenReturn(expectedBook);
 
         mockMvc.perform(
             get("/edit")
