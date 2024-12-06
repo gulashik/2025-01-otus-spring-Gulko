@@ -17,7 +17,6 @@ import ru.otus.hw.services.mappers.BookMapper;
 import ru.otus.hw.services.mappers.GenreMapper;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -36,10 +35,11 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public Optional<BookDto> findById(Long id) {
+    public BookDto findById(Long id) {
         return bookRepository
             .findById(id)
-            .map(bookMapper::toDto);
+            .map(bookMapper::toDto)
+            .orElseThrow(() -> new NotFoundException("No book"));
     }
 
     @Transactional

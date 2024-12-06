@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.dto.AuthorDto;
 import ru.otus.hw.models.dto.BookDto;
 import ru.otus.hw.models.dto.GenreDto;
@@ -18,6 +19,7 @@ import ru.otus.hw.services.mappers.GenreMapper;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static ru.otus.hw.objects.TestObjects.*;
 
 @DisplayName("Репозиторий на основе Jpa для работы с книгами ")
@@ -49,8 +51,7 @@ class BookDtoServiceImplTest {
     @MethodSource("getBooks")
     void findById(BookDto expectedBookDto) {
         var actualBook = service.findById(expectedBookDto.getId());
-        assertThat(actualBook).isPresent()
-            .get()
+        assertThat(actualBook)
             .isEqualTo(expectedBookDto);
     }
 
@@ -82,8 +83,6 @@ class BookDtoServiceImplTest {
             .isEqualTo(expectedBook);
 
         assertThat(service.findById(returnedBook.getId()))
-            .isPresent()
-            .get()
             .isEqualTo(returnedBook);
     }
 
@@ -93,8 +92,6 @@ class BookDtoServiceImplTest {
         var expectedBook = new BookDto(1L, "BookTitle_10500", dbAuthorDtos.get(2), dbGenreDtos.get(2));
 
         assertThat(service.findById(expectedBook.getId()))
-            .isPresent()
-            .get()
             .isNotEqualTo(expectedBook);
 
         var returnedBook = service.update(
@@ -109,8 +106,6 @@ class BookDtoServiceImplTest {
             .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
 
         assertThat(service.findById(returnedBook.getId()))
-            .isPresent()
-            .get()
             .isEqualTo(returnedBook);
     }
 
@@ -118,12 +113,12 @@ class BookDtoServiceImplTest {
     @Test
     void deleteById() {
         long id = 1L;
-        assertThat(service.findById(id)).isPresent();
+        assertThat(service.findById(id)).isNotNull();
         entityManager.clear();
 
         service.deleteById(id);
 
-        assertThat(service.findById(id)).isEmpty();
+        assertThatThrownBy(() -> service.findById(id)).isExactlyInstanceOf(NotFoundException.class);
     }
 
     public static List<BookDto> getBooks() {
