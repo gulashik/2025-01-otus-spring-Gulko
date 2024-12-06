@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.dto.BookDto;
 import ru.otus.hw.models.dto.CommentDto;
 import ru.otus.hw.services.mappers.AuthorMapper;
@@ -16,6 +17,7 @@ import ru.otus.hw.services.mappers.GenreMapper;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static ru.otus.hw.objects.TestObjects.getDbBooks;
 import static ru.otus.hw.objects.TestObjects.getDbComments;
 
@@ -48,8 +50,6 @@ class CommentDtoServiceImplTest {
         var actualComment = service.findById(expectedComment.getId());
 
         assertThat(actualComment)
-            .isPresent()
-            .get()
             .isEqualTo(expectedComment);
     }
 
@@ -77,7 +77,7 @@ class CommentDtoServiceImplTest {
         entityManager.clear();
         var actualComment = service.findById(expectedComment.getId());
 
-        assertThat(actualComment).isPresent().get().isEqualTo(expectedComment);
+        assertThat(actualComment).isEqualTo(expectedComment);
     }
 
     @DisplayName("должен обновить комментарий")
@@ -88,7 +88,7 @@ class CommentDtoServiceImplTest {
 
         service.update(expectedComment.getId(), expectedComment.getText());
         entityManager.flush();
-        var actualComment = service.findById(expectedComment.getId()).get();
+        var actualComment = service.findById(expectedComment.getId());
 
 
         assertThat(actualComment).isEqualTo(expectedComment);
@@ -103,7 +103,7 @@ class CommentDtoServiceImplTest {
 
         var actualComment = service.findById(expectedComment.getId());
 
-        assertThat(actualComment).isPresent().get().isEqualTo(expectedComment);
+        assertThat(actualComment).isEqualTo(expectedComment);
     }
 
     @DisplayName("должен удалить комментарий")
@@ -115,8 +115,6 @@ class CommentDtoServiceImplTest {
 
         entityManager.flush();
 
-        var actualComment = service.findById(id);
-
-        assertThat(actualComment).isEmpty();
+        assertThatThrownBy(() -> service.findById(id)).isExactlyInstanceOf(NotFoundException.class);
     }
 }

@@ -13,7 +13,6 @@ import ru.otus.hw.services.CommentService;
 import ru.otus.hw.services.mappers.CommentMapper;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -26,10 +25,11 @@ public class CommentServiceImpl implements CommentService {
     private final BookRepository bookRepository;
 
     @Override
-    public Optional<CommentDto> findById(long id) {
+    public CommentDto findById(long id) {
         return commentRepository
             .findById(id)
-            .map(commentMapper::toDto);
+            .map(commentMapper::toDto)
+            .orElseThrow(() -> new NotFoundException("No comment"));
     }
 
     @Override
