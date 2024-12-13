@@ -34,13 +34,13 @@ public class BookController {
     }
 
     @GetMapping("/add")
-    public String createBook(Model model) {
-        model.addAttribute("book", new BookUpdateDto(0L, "some title", 1l, 1l));
+    public String insertBook(Model model) {
+        model.addAttribute("book", new BookUpdateDto(0L, "some title", 1L, 1L));
         return "add";
     }
 
     @PostMapping("/add")
-    public String createBook(@ModelAttribute("book") BookCreateDto book) {
+    public String insertBook(@ModelAttribute("book") BookCreateDto book) {
         bookService.insert(book);
         return "redirect:/";
     }
