@@ -1,3 +1,3 @@
-# 2024-07-otus-spring-Gulko
+# 2025-01-otus-spring-Gulko
 
 Курс по Spring
