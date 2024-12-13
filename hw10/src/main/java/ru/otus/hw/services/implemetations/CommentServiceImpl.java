@@ -13,7 +13,6 @@ import ru.otus.hw.services.CommentService;
 import ru.otus.hw.services.mappers.CommentMapper;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -26,14 +25,15 @@ public class CommentServiceImpl implements CommentService {
     private final BookRepository bookRepository;
 
     @Override
-    public Optional<CommentDto> findById(Long id) {
+    public CommentDto findById(long id) {
         return commentRepository
             .findById(id)
-            .map(commentMapper::toDto);
+            .map(commentMapper::toDto)
+            .orElseThrow(() -> new NotFoundException("No comment"));
     }
 
     @Override
-    public List<CommentDto> findAllForBook(Long bookId) {
+    public List<CommentDto> findAllForBook(long bookId) {
         return commentRepository
             .findAllByBookId(bookId)
             .stream()
@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public CommentDto update(Long id, String text) {
+    public CommentDto update(long id, String text) {
         Comment comment = commentRepository
             .findById(id)
             .orElseThrow(() -> new NotFoundException("Comment with id " + id + " not found"));
@@ -76,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(long id) {
         commentRepository.deleteById(id);
     }
 }

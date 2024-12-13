@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.exceptions.NotFoundException;
+import ru.otus.hw.models.dto.BookCreateDto;
 import ru.otus.hw.models.dto.BookDto;
+import ru.otus.hw.models.dto.BookUpdateDto;
 import ru.otus.hw.models.entity.Author;
 import ru.otus.hw.models.entity.Book;
 import ru.otus.hw.models.entity.Genre;
@@ -35,14 +37,14 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public BookDto findById(Long id) {
+    public BookDto findById(long id) {
         return bookRepository
             .findById(id)
             .map(bookMapper::toDto)
             .orElseThrow(() -> new NotFoundException("No book"));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public List<BookDto> findAll() {
         return bookRepository
@@ -54,13 +56,17 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public BookDto insert(String title, Long authorId, Long genreId) {
-        return save(0L, title, authorId, genreId);
+    public BookDto insert(BookCreateDto bookCreateDto) {
+        return save(0, bookCreateDto.getTitle(), bookCreateDto.getAuthorId(), bookCreateDto.getGenreId());
     }
 
     @Transactional
     @Override
-    public BookDto update(Long id, String title, Long authorId, Long genreId) {
+    public BookDto update(BookUpdateDto bookUpdateDto) {
+        long id = bookUpdateDto.getId();
+        String title = bookUpdateDto.getTitle();
+        long authorId = bookUpdateDto.getAuthorId();
+        long genreId = bookUpdateDto.getGenreId();
 
         Book book = bookRepository
             .findById(id)
@@ -83,12 +89,12 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(long id) {
         bookRepository.deleteById(id);
     }
 
 
-    private BookDto save(Long id, String title, Long authorId, Long genreId) {
+    private BookDto save(long id, String title, long authorId, long genreId) {
         var author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new NotFoundException("Author with id %d not found".formatted(authorId)));
         var genre = genreRepository.findById(genreId)
