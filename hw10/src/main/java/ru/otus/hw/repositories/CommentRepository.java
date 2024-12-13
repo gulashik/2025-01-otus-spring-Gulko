@@ -6,5 +6,5 @@ import ru.otus.hw.models.entity.Comment;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-   List<Comment> findAllByBookId(long bookId);
+   List<Comment> findAllByBookId(Long bookId);
 }
