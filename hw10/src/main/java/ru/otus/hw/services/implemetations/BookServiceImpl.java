@@ -37,7 +37,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public BookDto findById(long id) {
+    public BookDto findById(Long id) {
         return bookRepository
             .findById(id)
             .map(bookMapper::toDto)
@@ -89,7 +89,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void deleteById(long id) {
+    public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }
 
