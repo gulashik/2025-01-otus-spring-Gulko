@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
 
 
         return book
-            .flatMap( curBook -> commentRepository.save( new Comment("0", text, curBook) ) )
+            .flatMap(curBook -> commentRepository.save(new Comment("0", text, curBook)))
             .map(commentMapper::toDto);
     }
 
