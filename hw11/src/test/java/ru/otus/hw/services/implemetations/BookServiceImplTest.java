@@ -33,7 +33,7 @@ import static ru.otus.hw.objects.TestObjects.*;
         AuthorMapper.class
     }
 )
-class BookDtoServiceImplTest {
+class BookServiceImplTest {
 
     @Autowired
     private MongoTemplate mongoTemplate;

@@ -31,7 +31,7 @@ import static ru.otus.hw.objects.TestObjects.getDbComments;
         GenreMapper.class
     }
 )
-class CommentDtoServiceImplTest {
+class CommentServiceImplTest {
 
     @Autowired
     private MongoTemplate mongoTemplate;
