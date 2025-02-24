@@ -1,7 +1,8 @@
 Поднять образ(если нужно)
 ```shell
-podman compose --file ./../../../../../../docker-compose.yml down && /
-podman compose --file ./../../../../../../docker-compose.yml up -d && /
+podman compose --file ./../../../../../../docker-compose.yml down 
+podman compose --file ./../../../../../../docker-compose.yml up -d 
+clear
 podman ps -a
 ```
 
@@ -59,4 +60,30 @@ echo "book with id=$BOOK_ID will be deleted"
 curl -X DELETE -s http://localhost:8080/api/v1/book/$BOOK_ID 
 
 curl -s http://localhost:8080/api/v1/books | jq -c '.[]'
+```
+[CommentController.java](controller%2FCommentController.java)</br>
+```shell
+clear 
+
+curl -s http://localhost:8080/api/v1/comments | jq -c '.[]'
+```
+```shell
+clear 
+
+curl -s http://localhost:8080/api/v1/comment/1 | jq -c '.[]'
+```
+```shell
+clear 
+
+curl -s 'http://localhost:8080/api/v1/comment?book_id=2' | jq -c '.[]'
+```
+```shell
+clear 
+
+curl -X PATCH -s http://localhost:8080/api/v1/comment/1 \
+-H "Content-Type: application/json" \
+-d '{"id":"1","text":"Comment_X_book_X","bookDto":{"id":"1"},"genreDto":{"id":"1"}}}' \
+| jq -c
+
+curl -s http://localhost:8080/api/v1/comments | jq -c '.[]'
 ```

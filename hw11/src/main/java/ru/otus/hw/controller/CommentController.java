@@ -15,7 +15,7 @@ import ru.otus.hw.models.mappers.CommentMapper;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 public class CommentController {
     private final CommentRepository commentRepository;
 
@@ -23,36 +23,43 @@ public class CommentController {
 
     private final CommentMapper commentMapper;
 
-    @GetMapping(value = "comment")
-    public Flux<CommentDto> getCommentsByBook(@RequestParam("book_id") String bookId) {
+    @GetMapping(value = "/comments")
+    public Flux<CommentDto> getComments() {
         return commentRepository
-            .findAllByBookId(bookId)
+            .findAll()
             .map(commentMapper::toDto);
     }
 
-    @GetMapping("comment/{id}")
+    @GetMapping("/comment/{id}")
     public Mono<CommentDto> getComment(@PathVariable("id") String id) {
         return commentRepository
             .findById(id)
             .map(commentMapper::toDto);
     }
 
-    @PatchMapping("comment/{id}")
+    @GetMapping(value = "/comment")
+    public Flux<CommentDto> getCommentsByBook(@RequestParam(value="book_id") String bookId) {
+        return commentRepository
+            .findAllByBookId(bookId)
+            .map(commentMapper::toDto);
+    }
+
+    @PatchMapping("/comment/{id}")
     public Mono<CommentDto> updateComment(@RequestBody Mono<CommentDto> monoCommentDto, @PathVariable("id") String id) {
-        return toMono(monoCommentDto, id);
+        return save(monoCommentDto, id);
     }
 
-    @PostMapping("comment")
+    @PostMapping("/comment")
     public Mono<CommentDto> createComment(@RequestBody Mono<CommentDto> monoCommentDto) {
-        return toMono(monoCommentDto, null);
+        return save(monoCommentDto, null);
     }
 
-    @DeleteMapping("comment/{id}")
+    @DeleteMapping("/comment/{id}")
     public Mono<Void> deleteComment(@PathVariable String id) {
         return commentRepository.deleteById(id);
     }
 
-    private Mono<CommentDto> toMono(Mono<CommentDto> monoCommentDto, String id) {
+    private Mono<CommentDto> save(Mono<CommentDto> monoCommentDto, String id) {
         return monoCommentDto
             .zipWhen(
                 (CommentDto commentDto) ->
