@@ -11,14 +11,14 @@ import ru.otus.hw.repositories.AuthorRepository;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 public class AuthorController {
     private final AuthorRepository repository;
 
     private final AuthorMapper mapper;
 
     // curl http://localhost:8080/api/v1/authors
-    @GetMapping("authors")
+    @GetMapping("/authors")
     public Flux<AuthorDto> getAuthors() {
         return repository
             .findAll()

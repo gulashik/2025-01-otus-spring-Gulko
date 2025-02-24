@@ -19,7 +19,7 @@ import ru.otus.hw.repositories.GenreRepository;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 public class BookController {
     private final BookRepository bookRepository;
 
@@ -32,7 +32,7 @@ public class BookController {
     private final CommentRepository commentRepository;
 
     // curl http://localhost:8080/api/v1/books
-    @GetMapping("books")
+    @GetMapping("/books")
     public Flux<BookDto> getBooks() {
         return bookRepository
             .findAll()
@@ -40,7 +40,7 @@ public class BookController {
     }
 
     // curl http://localhost:8080/api/v1/book/1
-    @GetMapping("book/{id}")
+    @GetMapping("/book/{id}")
     public Mono<BookDto> getBook(@PathVariable("id") String id) {
         return bookRepository
             .findById(id)
@@ -58,13 +58,13 @@ public class BookController {
     // curl -X PATCH http://localhost:8080/api/v1/book/1 \
     //-H "Content-Type: application/json" \
     //-d '{"id":1,"title":"BookTitle_x","authorDto":{"id":"2"},"genreDto":{"id":"2"}}'
-    @PatchMapping("book/{id}")
+    @PatchMapping("/book/{id}")
     public Mono<BookDto> updateBook(@RequestBody Mono<BookDto> monoBookDto, @PathVariable("id") String id) {
         return save(monoBookDto, id);
     }
 
     // curl -X DELETE -s http://localhost:8080/api/v1/book/1
-    @DeleteMapping("book/{id}")
+    @DeleteMapping("/book/{id}")
     public Mono<Void> deleteBook(@PathVariable String id) {
         return commentRepository
             .deleteAllByBookId(id)

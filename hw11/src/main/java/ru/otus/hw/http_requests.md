@@ -87,3 +87,23 @@ curl -X PATCH -s http://localhost:8080/api/v1/comment/1 \
 
 curl -s http://localhost:8080/api/v1/comments | jq -c '.[]'
 ```
+```shell
+clear 
+
+curl -X POST -s http://localhost:8080/api/v1/comment \
+-H "Content-Type: application/json" \
+-d '{"id":null,"text":"Comment_New_book_New","bookDto":{"id":"2"},"genreDto":{"id":"2"}}}' \
+| jq -c
+
+curl -s http://localhost:8080/api/v1/comments | jq -c '.[]'
+```
+```shell
+clear 
+
+COMMENT_ID=$(curl -s http://localhost:8080/api/v1/comments | jq -r '.[0].id')
+echo "comments with id=$COMMENT_ID will be deleted"
+
+curl -X DELETE -s http://localhost:8080/api/v1/comment/$COMMENT_ID 
+
+curl -s http://localhost:8080/api/v1/comments | jq -c '.[]'
+```

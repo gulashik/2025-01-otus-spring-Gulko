@@ -11,14 +11,14 @@ import ru.otus.hw.models.mappers.GenreMapper;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 public class GenreController {
     private final GenreRepository repository;
 
     private final GenreMapper mapper;
 
     // curl http://localhost:8080/api/v1/genres
-    @GetMapping("genres")
+    @GetMapping("/genres")
     public Flux<GenreDto> getGenres() {
         return repository.findAll().map(mapper::toDto);
     }
