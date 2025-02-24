@@ -38,7 +38,7 @@ public class CommentController {
     }
 
     @GetMapping(value = "/comment")
-    public Flux<CommentDto> getCommentsByBook(@RequestParam(value="book_id") String bookId) {
+    public Flux<CommentDto> getCommentsByBook(@RequestParam(value = "book_id") String bookId) {
         return commentRepository
             .findAllByBookId(bookId)
             .map(commentMapper::toDto);
