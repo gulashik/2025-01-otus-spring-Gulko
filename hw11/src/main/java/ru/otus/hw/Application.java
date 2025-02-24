@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories
 @SpringBootApplication
 public class Application {
-	/*поднять образ MongoDB - compose.md*/
+	/* todo поднять образ MongoDB - compose.md или через http_requests.md*/
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}

@@ -1,4 +1,4 @@
-package ru.otus.hw.services.mappers;
+package ru.otus.hw.models.mappers;
 
 import org.springframework.stereotype.Component;
 import ru.otus.hw.models.dto.AuthorDto;
