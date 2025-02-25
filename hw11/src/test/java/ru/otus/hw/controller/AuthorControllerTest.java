@@ -14,7 +14,6 @@ import ru.otus.hw.models.mappers.AuthorMapper;
 import ru.otus.hw.models.mappers.BookMapper;
 import ru.otus.hw.models.mappers.GenreMapper;
 import ru.otus.hw.objects.TestObjectsDb;
-import ru.otus.hw.repositories.AuthorRepository;
 
 import java.util.List;
 
@@ -38,15 +37,6 @@ class AuthorControllerTest {
     @Autowired
     private AuthorController authorController;
 
-    @Autowired
-    private AuthorRepository authorRepository;
-
-    @Autowired
-    private AuthorMapper authorMapper;
-
-    @Autowired
-    private BookMapper bookMapper;
-
     private final List<AuthorDto> dbAuthorDtos = getDbAuthors();
 
     private final List<GenreDto> dbGenreDtos = getDbGenres();
@@ -63,8 +53,7 @@ class AuthorControllerTest {
     @Test
     void getAuthors() {
         Iterable<AuthorDto> actualAuthors = authorController.getAuthors().toIterable();
-        Iterable<AuthorDto> expectedAuthors = dbAuthorDtos;
 
-        assertThat(actualAuthors).containsExactlyElementsOf(expectedAuthors);
+        assertThat(actualAuthors).containsExactlyElementsOf(dbAuthorDtos);
     }
 }
