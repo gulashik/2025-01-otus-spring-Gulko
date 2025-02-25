@@ -18,6 +18,7 @@ import ru.otus.hw.models.mappers.GenreMapper;
 import ru.otus.hw.objects.TestObjectsDb;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.otus.hw.objects.TestObjects.*;
@@ -55,6 +56,7 @@ class BookControllerTest {
     void getBooks() {
         Iterable<BookDto> actualBooks = bookController.getBooks().toIterable();
 
+        // assert
         assertThat(actualBooks).containsExactlyElementsOf(dbBookDtos);
     }
 
@@ -73,17 +75,37 @@ class BookControllerTest {
         BookDto expectedBook = new BookDto(/*id*/null,/*title*/"TestTitle", /*author*/dbAuthorDtos.get(0),/*genre*/dbGenreDtos.get(0));
         BookDto actualBook = bookController.createBook(Mono.just(expectedBook)).block();
 
+        // assert
         assertThat(actualBook)
             .usingRecursiveComparison()
             .ignoringFields("id")
             .isEqualTo(expectedBook);
     }
 
+    @DisplayName("должен изменить книгу")
     @Test
     void updateBook() {
+        BookDto expectedBook = dbBookDtos.get(0);
+        expectedBook.setTitle("TestTitle");
+
+        BookDto actualBook = bookController.updateBook(
+            Mono.just(expectedBook),
+            expectedBook.getId()
+        ).block();
+
+        // assert
+        assertThat(actualBook).isEqualTo(expectedBook);
     }
 
+    @DisplayName("должен удалить книгу")
     @Test
     void deleteBook() {
+        BookDto expectedBook = dbBookDtos.get(0);
+        bookController.deleteBook(expectedBook.getId()).block();
+
+        Optional<BookDto> actualBook = bookController.getBook(expectedBook.getId()).blockOptional();
+
+        // assert
+        assertThat(actualBook).isEmpty();
     }
 }

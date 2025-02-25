@@ -54,6 +54,7 @@ class AuthorControllerTest {
     void getAuthors() {
         Iterable<AuthorDto> actualAuthors = authorController.getAuthors().toIterable();
 
+        // assert
         assertThat(actualAuthors).containsExactlyElementsOf(dbAuthorDtos);
     }
 }
