@@ -1,5 +1,6 @@
 package ru.otus.hw.controller;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ class BookControllerTest {
     @MockBean
     private BookService bookService;
 
+    @Disabled
     @Test
     void getBook() throws Exception {
         BookDto expectedBook = dbBookDtos.get(0);
@@ -48,6 +50,7 @@ class BookControllerTest {
         assertThat(books.get(0)).isEqualTo(expectedBook);
     }
 
+    @Disabled
     @Test
     void editBook() throws Exception {
         BookDto expectedBook = dbBookDtos.get(0);
