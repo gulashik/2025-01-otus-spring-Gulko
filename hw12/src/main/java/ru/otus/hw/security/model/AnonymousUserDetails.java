@@ -1,4 +1,4 @@
-package ru.otus.hw.security;
+package ru.otus.hw.security.model;
 
 
 import lombok.Data;
