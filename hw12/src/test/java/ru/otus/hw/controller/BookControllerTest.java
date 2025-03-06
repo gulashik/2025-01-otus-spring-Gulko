@@ -8,8 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import ru.otus.hw.models.dto.BookDto;
-import ru.otus.hw.services.BookService;
+import ru.otus.hw.model.dto.BookDto;
+import ru.otus.hw.service.BookService;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.otus.hw.objects.TestObjects.getDbBooks;
+import static ru.otus.hw.object.TestObjects.getDbBooks;
 
 @WebMvcTest(BookController.class)
 class BookControllerTest {

@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.hw.models.dto.BookCreateDto;
-import ru.otus.hw.models.dto.BookDto;
-import ru.otus.hw.models.dto.BookUpdateDto;
-import ru.otus.hw.services.BookService;
+import ru.otus.hw.model.dto.BookCreateDto;
+import ru.otus.hw.model.dto.BookDto;
+import ru.otus.hw.model.dto.BookUpdateDto;
+import ru.otus.hw.service.BookService;
 
 @Controller
 @RequiredArgsConstructor
