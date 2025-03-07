@@ -1,6 +1,5 @@
-package ru.otus.hw.service.implemetations;
+package ru.otus.hw.service.implementation;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +9,10 @@ import org.springframework.context.annotation.Import;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.model.dto.BookDto;
 import ru.otus.hw.model.dto.CommentDto;
-import ru.otus.hw.service.implementation.BookServiceImpl;
-import ru.otus.hw.service.implementation.CommentServiceImpl;
-import ru.otus.hw.service.mapper.BookMapper;
-import ru.otus.hw.service.mapper.GenreMapper;
 import ru.otus.hw.service.mapper.AuthorMapper;
+import ru.otus.hw.service.mapper.BookMapper;
 import ru.otus.hw.service.mapper.CommentMapper;
+import ru.otus.hw.service.mapper.GenreMapper;
 
 import java.util.List;
 
@@ -24,7 +21,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static ru.otus.hw.object.TestObjects.getDbBooks;
 import static ru.otus.hw.object.TestObjects.getDbComments;
 
-@Disabled("Тест временно отключен")
 @DisplayName("Сервис на основе Jpa для работы с комментариями ")
 @DataJpaTest
 @Import(
@@ -37,15 +33,15 @@ import static ru.otus.hw.object.TestObjects.getDbComments;
 )
 class CommentDtoServiceImplTest {
 
+    private final List<BookDto> dbBookDtos = getDbBooks();
+
+    private final List<CommentDto> dbCommentDtos = getDbComments();
+
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
     private CommentServiceImpl service;
-
-    private final List<BookDto> dbBookDtos = getDbBooks();
-
-    private final List<CommentDto> dbCommentDtos = getDbComments();
 
     @DisplayName("должен загружать комментарий по id")
     @Test

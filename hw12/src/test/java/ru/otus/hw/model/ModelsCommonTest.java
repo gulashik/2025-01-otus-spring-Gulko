@@ -2,7 +2,6 @@ package ru.otus.hw.model;
 
 import jakarta.persistence.Entity;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -38,12 +37,11 @@ class ModelsCommonTest {
             <version>${reflections.version}</version>
         </dependency>
          */
-        var reflections = new Reflections("ru.otus.hw.models");
+        var reflections = new Reflections("ru.otus.hw.model");
         entitiesClasses = reflections.getTypesAnnotatedWith(Entity.class);
 
     }
 
-    @Disabled
     @ParameterizedTest
     @MethodSource("getEntities")
     void shouldMappedForBidirectionalRelationshipsInModelClasses(Class<?> entityClass) {
