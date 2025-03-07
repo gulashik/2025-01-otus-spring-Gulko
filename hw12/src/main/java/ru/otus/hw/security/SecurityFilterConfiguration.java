@@ -11,8 +11,6 @@ import org.springframework.security.config.annotation.web.configurers.AnonymousC
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.otus.hw.security.model.AnonymousUserDetails;
@@ -54,7 +52,9 @@ public class SecurityFilterConfiguration {
             .formLogin(
                 Customizer.withDefaults()
             )
-            .userDetailsService(userDetailsManager)
+            .userDetailsService(
+                userDetailsManager
+            )
             .build();
     }
 }

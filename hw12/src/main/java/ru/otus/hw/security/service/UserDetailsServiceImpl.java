@@ -1,6 +1,7 @@
 package ru.otus.hw.security.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             .findByUsername(username)
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        return org.springframework.security.core.userdetails.User
+        return User
             .withUsername(authenticatedUser.getUsername())
             .password(authenticatedUser.getPassword())
             .authorities(

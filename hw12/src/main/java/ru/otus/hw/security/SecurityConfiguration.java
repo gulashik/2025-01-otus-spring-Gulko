@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -14,17 +14,13 @@ import javax.sql.DataSource;
 @Configuration
 public class SecurityConfiguration {
 
-    // https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/storage.html
-    @SuppressWarnings("deprecation")
     @Bean
     public PasswordEncoder passwordEncoder() {
-        //return new BCryptPasswordEncoder(10);
-        return NoOpPasswordEncoder.getInstance();
-
+        return new BCryptPasswordEncoder(10);
     }
 
     @Bean
-    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+    public UserDetailsManager userDetailsManager(DataSource dataSource, PasswordEncoder passwordEncoder) {
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
 
         // добавить пользователя при старте приложения
@@ -32,22 +28,11 @@ public class SecurityConfiguration {
             UserDetails user = User
                 .builder()
                 .username("user")
-                .password("password")
+                .password(passwordEncoder.encode("password"))
                 .roles("USER")
                 .build();
             userDetailsManager.createUser(user);
         }
         return userDetailsManager;
     }
-
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService() {
-//        UserDetails user = User
-//            .builder()
-//            .username("user")
-//            .password("password")
-//            .roles("USER")
-//            .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
 }
