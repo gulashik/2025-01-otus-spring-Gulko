@@ -52,6 +52,14 @@ public class SecurityFilterConfiguration {
             .formLogin(
                 Customizer.withDefaults()
             )
+            .logout(
+                (logout) ->
+                    logout
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+            )
             .userDetailsService(
                 userDetailsManager
             )

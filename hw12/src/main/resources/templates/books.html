@@ -6,6 +6,7 @@
     <style type="text/css">
         body {
             padding: 50px;
+            position: relative; /* Добавлено для позиционирования ссылки */
         }
 
         .books {
@@ -40,9 +41,25 @@
             padding-left: 30px;
         }
 
+        /* Стиль для ссылки выхода */
+        .logout-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: deeppink;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+<!-- Ссылка на выход -->
+<a class="logout-link" th:href="@{/logout}">Logout</a>
 
 <h3 th:text="Books">Books:</h3>
 
@@ -76,6 +93,5 @@
 <div class="row">
     <a href="add.html" th:href="@{/add}"><button type="button">AddBook</button></a>
 </div>
-
 </body>
 </html>
