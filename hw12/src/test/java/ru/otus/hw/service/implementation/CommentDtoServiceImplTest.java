@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Import;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.model.dto.BookDto;
 import ru.otus.hw.model.dto.CommentDto;
-import ru.otus.hw.service.mapper.AuthorMapper;
-import ru.otus.hw.service.mapper.BookMapper;
-import ru.otus.hw.service.mapper.CommentMapper;
-import ru.otus.hw.service.mapper.GenreMapper;
+import ru.otus.hw.model.mapper.AuthorMapperImpl;
+import ru.otus.hw.model.mapper.BookMapperImpl;
+import ru.otus.hw.model.mapper.CommentMapperImpl;
+import ru.otus.hw.model.mapper.GenreMapperImpl;
 
 import java.util.List;
 
@@ -25,10 +25,10 @@ import static ru.otus.hw.object.TestObjects.getDbComments;
 @DataJpaTest
 @Import(
     {
-        CommentServiceImpl.class, CommentMapper.class,
-        BookServiceImpl.class, BookMapper.class,
-        AuthorMapper.class,
-        GenreMapper.class
+        CommentServiceImpl.class, CommentMapperImpl.class,
+        BookServiceImpl.class, BookMapperImpl.class,
+        AuthorMapperImpl.class,
+        GenreMapperImpl.class
     }
 )
 class CommentDtoServiceImplTest {

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.hw.model.dto.AuthorDto;
 import ru.otus.hw.repository.AuthorRepository;
 import ru.otus.hw.service.AuthorService;
-import ru.otus.hw.service.mapper.AuthorMapper;
+import ru.otus.hw.model.mapper.AuthorMapper;
 
 import java.util.List;
 

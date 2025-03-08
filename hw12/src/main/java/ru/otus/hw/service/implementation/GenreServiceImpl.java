@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.hw.model.dto.GenreDto;
 import ru.otus.hw.repository.GenreRepository;
-import ru.otus.hw.service.mapper.GenreMapper;
+import ru.otus.hw.model.mapper.GenreMapper;
 import ru.otus.hw.service.GenreService;
 
 import java.util.List;

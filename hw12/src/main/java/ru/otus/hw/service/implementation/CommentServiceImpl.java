@@ -10,7 +10,7 @@ import ru.otus.hw.model.entity.Comment;
 import ru.otus.hw.repository.BookRepository;
 import ru.otus.hw.repository.CommentRepository;
 import ru.otus.hw.service.CommentService;
-import ru.otus.hw.service.mapper.CommentMapper;
+import ru.otus.hw.model.mapper.CommentMapper;
 
 import java.util.List;
 

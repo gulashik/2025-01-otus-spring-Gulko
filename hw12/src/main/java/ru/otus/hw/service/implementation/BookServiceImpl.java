@@ -14,9 +14,9 @@ import ru.otus.hw.repository.AuthorRepository;
 import ru.otus.hw.repository.BookRepository;
 import ru.otus.hw.repository.GenreRepository;
 import ru.otus.hw.service.BookService;
-import ru.otus.hw.service.mapper.AuthorMapper;
-import ru.otus.hw.service.mapper.BookMapper;
-import ru.otus.hw.service.mapper.GenreMapper;
+import ru.otus.hw.model.mapper.AuthorMapper;
+import ru.otus.hw.model.mapper.BookMapper;
+import ru.otus.hw.model.mapper.GenreMapper;
 
 import java.util.List;
 

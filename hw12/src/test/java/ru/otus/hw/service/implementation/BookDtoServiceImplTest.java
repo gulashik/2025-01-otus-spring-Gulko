@@ -9,10 +9,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.hw.model.dto.*;
-import ru.otus.hw.service.mapper.BookMapper;
-import ru.otus.hw.service.mapper.GenreMapper;
-import ru.otus.hw.service.mapper.AuthorMapper;
+
 import ru.otus.hw.exception.EntityNotFoundException;
+import ru.otus.hw.model.mapper.AuthorMapperImpl;
+import ru.otus.hw.model.mapper.BookMapperImpl;
+import ru.otus.hw.model.mapper.GenreMapperImpl;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ import static ru.otus.hw.object.TestObjects.*;
 @Import(
     {
         BookServiceImpl.class,
-        BookMapper.class,
-        GenreMapper.class,
-        AuthorMapper.class
+        BookMapperImpl.class,
+        GenreMapperImpl.class,
+        AuthorMapperImpl.class
     }
 )
 class BookDtoServiceImplTest {
