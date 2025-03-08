@@ -13,7 +13,7 @@ public class RegularUserConfig implements ApplicationRunner {
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
-    public void run(ApplicationArguments args){
+    public void run(ApplicationArguments args) {
         userDetailsService.createUser("user", "user", "USER");
         userDetailsService.createUser("admin", "admin", "ADMIN");
     }
