@@ -46,7 +46,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         ).orElse(null);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public UserDetails createUser(String username, String rawPassword, String... authorities) {
 
         if (userRepository.findByUsername(username).isEmpty()) {
