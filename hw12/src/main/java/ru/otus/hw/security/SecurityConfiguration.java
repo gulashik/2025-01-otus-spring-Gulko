@@ -2,9 +2,6 @@ package ru.otus.hw.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -21,23 +18,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public UserDetailsManager userDetailsManager(
-        DataSource dataSource, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService
-    ) {
-        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-
-        // добавить пользователя при старте приложения
-        if (!userDetailsManager.userExists("user")) {
-        // или так можно
-        //if (userDetailsService.loadUserByUsername("user") == null) {
-            UserDetails user = User
-                .builder()
-                .username("user")
-                .password(passwordEncoder.encode("password"))
-                .roles("USER")
-                .build();
-            userDetailsManager.createUser(user);
-        }
-        return userDetailsManager;
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+        return new JdbcUserDetailsManager(dataSource);
     }
 }
