@@ -32,7 +32,11 @@ class BookControllerSecurityTest {
                     .with(user("user").authorities(new SimpleGrantedAuthority("ROLE_USER")))
             )
             .andExpect(status().isOk());
+    }
 
+    @DisplayName("should not works with non-authenticated users")
+    @Test
+    void shoulRejectNonAuthenticatedUserRequest() throws Exception {
         // non-authenticated user - access denied
         mockMvc.perform(
                 get("/")
