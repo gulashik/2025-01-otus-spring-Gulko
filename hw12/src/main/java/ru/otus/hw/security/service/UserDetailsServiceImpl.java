@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,6 @@ import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.security.model.AuthenticatedUserDetails;
 import ru.otus.hw.security.model.Authority;
 import ru.otus.hw.security.repository.UserRepository;
-
-import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -30,20 +29,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Optional<AuthenticatedUserDetails> authenticatedUser = userRepository
-            .findByUsername(username);
+        AuthenticatedUserDetails authenticatedUser = userRepository
+            .findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User %s not found".formatted(username)));
 
-        return authenticatedUser.map(
-            authenticatedUserDetails -> User
-                .withUsername(authenticatedUserDetails.getUsername())
-                .password(authenticatedUserDetails.getPassword())
+        return User
+                .withUsername(authenticatedUser.getUsername())
+                .password(authenticatedUser.getPassword())
                 .authorities(
-                    authenticatedUserDetails.getAuthorities().stream()
+                    authenticatedUser.getAuthorities().stream()
                         .map(Authority::getAuthority)
                         .toArray(String[]::new)
                 )
-                .build()
-        ).orElse(null);
+                .build();
     }
 
     @Transactional(rollbackFor = Exception.class)
