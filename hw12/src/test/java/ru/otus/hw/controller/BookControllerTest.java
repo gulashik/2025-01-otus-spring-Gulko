@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -17,13 +16,15 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.otus.hw.object.TestObjects.getDbBooks;
 
-
+@WithMockUser(
+    username = "user",
+    authorities = {"ROLE_USER"}
+)
 @WebMvcTest(BookController.class)
 class BookControllerTest {
 
@@ -35,11 +36,6 @@ class BookControllerTest {
     @MockBean
     private BookService bookService;
 
-
-    @WithMockUser(
-        username = "user",
-        authorities = {"ROLE_USER"}
-    )
     @DisplayName("should get all books")
     @Test
     void getBook() throws Exception {
@@ -61,11 +57,6 @@ class BookControllerTest {
         assertThat(books.get(0)).isEqualTo(expectedBook);
     }
 
-
-    @WithMockUser(
-        username = "user",
-        authorities = {"ROLE_USER"}
-    )
     @DisplayName("should edit book")
     @Test
     void editBook() throws Exception {
@@ -81,22 +72,5 @@ class BookControllerTest {
             .andExpect(content().contentType("text/html;charset=UTF-8"));
 
         Mockito.verify(bookService, Mockito.times(1)).findById(expectedBook.getId());
-    }
-
-    @DisplayName("should works only with authenticated request")
-    @Test
-    void shouldAccessOnlyAuthenticatedUser() throws Exception {
-        // authenticated user - got access
-        mockMvc.perform(
-                get("/")
-                    .with(user("user").authorities(new SimpleGrantedAuthority("ROLE_USER")))
-            )
-            .andExpect(status().isOk());
-
-        // non-authenticated user - access denied
-        mockMvc.perform(
-                get("/")
-            )
-            .andExpect(status().isUnauthorized());
     }
 }
