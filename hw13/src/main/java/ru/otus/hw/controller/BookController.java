@@ -1,6 +1,7 @@
 package ru.otus.hw.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,10 @@ public class BookController {
     @GetMapping("/")
     public String listBooks(Model model) {
         model.addAttribute("books", bookService.findAll());
+        model.addAttribute(
+            "username",
+            SecurityContextHolder.getContext().getAuthentication().getName()
+        );
         return "books";
     }
 

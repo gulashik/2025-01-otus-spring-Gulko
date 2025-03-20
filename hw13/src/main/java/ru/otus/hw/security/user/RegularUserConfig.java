@@ -15,6 +15,7 @@ public class RegularUserConfig implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         userDetailsService.createUser("user", "user", "USER");
+        userDetailsService.createUser("manager", "manager", "MANAGER");
         userDetailsService.createUser("admin", "admin", "ADMIN");
     }
 }
