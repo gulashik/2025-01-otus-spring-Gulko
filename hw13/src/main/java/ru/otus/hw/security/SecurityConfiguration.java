@@ -21,4 +21,5 @@ public class SecurityConfiguration {
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
         return new JdbcUserDetailsManager(dataSource);
     }
+
 }

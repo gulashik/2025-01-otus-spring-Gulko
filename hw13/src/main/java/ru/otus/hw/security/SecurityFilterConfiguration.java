@@ -3,6 +3,8 @@ package ru.otus.hw.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,7 +17,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.otus.hw.security.model.AnonymousUserDetails;
-import ru.otus.hw.security.service.AuthorizationService;
 
 @RequiredArgsConstructor
 @Configuration
@@ -39,9 +40,9 @@ public class SecurityFilterConfiguration {
                 (authorize) -> authorize
                     // .requestMatchers(HttpMethod.XXX, "/xxx/**").hasRole("XXX")
                     .requestMatchers("/h2-console/**").permitAll()
-                    .requestMatchers("/").access(new AuthorizationService().hasAuthorizationGrant("USER"))
-                    .requestMatchers("/edit").access(new AuthorizationService().hasAuthorizationGrant("MANAGER"))
-                    .requestMatchers("/add","/delete").access(new AuthorizationService().hasAuthorizationGrant("ADMIN"))
+                    .requestMatchers("/").hasAnyRole("USER")
+                    .requestMatchers("/edit").hasAnyRole("MANAGER")
+                    .requestMatchers("/add","/delete").hasAnyRole("ADMIN")
                     .anyRequest().denyAll()
             )
             .headers(
@@ -70,5 +71,12 @@ public class SecurityFilterConfiguration {
                 userDetailsManager
             )
             .build();
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_MANAGER > ROLE_USER");
+        return hierarchy;
     }
 }

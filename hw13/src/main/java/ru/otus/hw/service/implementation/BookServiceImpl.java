@@ -1,6 +1,7 @@
 package ru.otus.hw.service.implementation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.exception.EntityNotFoundException;
@@ -35,6 +36,7 @@ public class BookServiceImpl implements BookService {
 
     private final GenreMapper genreMapper;
 
+    @Secured("ROLE_MANAGER")
     @Transactional(readOnly = true)
     @Override
     public BookDto findById(long id) {
