@@ -1,0 +1,66 @@
+spring:
+  # Spring Batch
+  batch:
+    job:
+      enabled: false # Отключаю автоматический запуск Job-ов во время старта приложения
+
+  # Spring shell
+  shell:
+    interactive:
+      enabled: true
+    noninteractive:
+      enabled: false
+    command:
+      version:
+        enabled: false
+
+  # Mongo datasource
+  data:
+    mongodb:
+      host: localhost
+      port: 8099
+      database: mdb
+
+  # H2 datasource
+  datasource:
+    url: jdbc:h2:mem:h2db
+    driver-class-name: org.h2.Driver
+    username: root
+    password: root
+  h2:
+    console.enabled: true
+
+  # Sql
+  sql:
+    init:
+      mode: never
+
+  # Jpa
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+  # Liquibase
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+# Embedded Mongo server
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
+
+# MongoDB migration
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package: ru.otus.hw.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
