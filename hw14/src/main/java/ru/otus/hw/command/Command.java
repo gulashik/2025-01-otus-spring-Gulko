@@ -23,13 +23,22 @@ public class Command {
         System.out.println(jobExecution);
     }
 
-    @ShellMethod(value = "OpenConsoleH2", key = "oc")
-    public String OpenConsoleH2() {
+    @ShellMethod(value = "openConsoleH2", key = "oc")
+    public String openConsoleH2() {
         try {
             Console.main();
-            return "Открывается консоль H2";
+
+            return """
+                    Opening console H2 see application.yml
+                        datasource:
+                        url: jdbc:h2:mem:h2db
+                        driver-class-name: org.h2.Driver
+                        username: root
+                        password: root
+                    """;
         } catch (final Exception ex) {
-            return "Ошибка при открытии консоли H2: %s".formatted(ex.getLocalizedMessage());
+
+            return "Error opening console H2: %s".formatted(ex.getLocalizedMessage());
         }
     }
 }

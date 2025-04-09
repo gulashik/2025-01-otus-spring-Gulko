@@ -7,10 +7,7 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.otus.hw.migration.step.AuthorStep;
-import ru.otus.hw.migration.step.BookStep;
-import ru.otus.hw.migration.step.CommentStep;
-import ru.otus.hw.migration.step.GenreStep;
+import ru.otus.hw.migration.step.*;
 
 @RequiredArgsConstructor
 @Configuration
@@ -20,6 +17,8 @@ public class Job {
     public static final int CHUNK_SIZE = 5;
 
     private final JobRepository jobRepository;
+
+    private final AllTruncateStep allTruncateStep;
 
     private final AuthorStep authorStep;
 
@@ -41,9 +40,12 @@ public class Job {
             // Позволяет перезапускать Job с одинаковыми параметрами одним и тем же экземпляром (JobInstance)
             .incrementer(new RunIdIncrementer())
 
+            // Pre-cleaning target tables
+            .start(allTruncateStep.truncateTargetTables())
+
             // Temporary objects create
             // Table
-            .start(authorStep.createTempTableAuthor())
+            .next(authorStep.createTempTableAuthor())
             .next(genreStep.createTempTableGenre())
             .next(bookStep.createTempTableBook())
             .next(commentStep.createTempTableComment())
