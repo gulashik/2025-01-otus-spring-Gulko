@@ -1,4 +1,4 @@
-package ru.otus.hw.model.h2.dto;
+package ru.otus.hw.model.targetdb.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

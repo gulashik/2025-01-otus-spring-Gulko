@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.otus.hw.migration.step.*;
 
-@RequiredArgsConstructor
 @Configuration
 public class Job {
     public static final String MIGRATE_JOB_NAME = "migrateJob";
@@ -27,6 +26,22 @@ public class Job {
     private final GenreStep genreStep;
 
     private final CommentStep commentStep;
+
+    public Job(
+        JobRepository jobRepository,
+        AllTruncateStep allTruncateStep,
+        AuthorStep authorStep,
+        BookStep bookStep,
+        GenreStep genreStep,
+        CommentStep commentStep
+    ) {
+        this.jobRepository = jobRepository;
+        this.allTruncateStep = allTruncateStep;
+        this.authorStep = authorStep;
+        this.bookStep = bookStep;
+        this.genreStep = genreStep;
+        this.commentStep = commentStep;
+    }
 
     @Bean
     public org.springframework.batch.core.Job migrateJob(

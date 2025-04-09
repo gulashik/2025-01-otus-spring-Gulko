@@ -1,4 +1,4 @@
-package ru.otus.hw.model.mongo.dto;
+package ru.otus.hw.model.targetdb.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GenreDto {
-    private String id;
+public class AuthorDto {
+    private Long id;
 
-    private String name;
+    private String fullName;
 }

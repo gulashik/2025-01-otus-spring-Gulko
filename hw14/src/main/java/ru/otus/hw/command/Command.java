@@ -10,12 +10,16 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 
-@RequiredArgsConstructor
 @ShellComponent
 public class Command {
     private final Job migrateJob;
 
     private final JobLauncher jobLauncher;
+
+    public Command(Job migrateJob, JobLauncher jobLauncher) {
+        this.migrateJob = migrateJob;
+        this.jobLauncher = jobLauncher;
+    }
 
     @ShellMethod(value = "startMigration", key = "sm")
     public void startMigration() throws Exception {
@@ -34,7 +38,7 @@ public class Command {
                         url: jdbc:h2:mem:h2db
                         driver-class-name: org.h2.Driver
                         username: root
-                        password: root
+                        password: 
                     """;
         } catch (final Exception ex) {
 

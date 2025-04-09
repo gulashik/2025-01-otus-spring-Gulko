@@ -1,8 +1,8 @@
 package ru.otus.hw.migration.item.processor;
 
 import org.springframework.batch.item.ItemProcessor;
-import ru.otus.hw.model.mongo.dto.CommentDto;
-import ru.otus.hw.model.mongo.entity.Comment;
+import ru.otus.hw.model.sourcedb.dto.CommentDto;
+import ru.otus.hw.model.sourcedb.entity.Comment;
 
 public class CommentItemProcessorImpl implements ItemProcessor<Comment, CommentDto> {
 

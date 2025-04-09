@@ -2,7 +2,7 @@ package ru.otus.hw.repositories.mongo;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.lang.NonNull;
-import ru.otus.hw.model.mongo.entity.Book;
+import ru.otus.hw.model.sourcedb.entity.Book;
 
 import java.util.List;
 

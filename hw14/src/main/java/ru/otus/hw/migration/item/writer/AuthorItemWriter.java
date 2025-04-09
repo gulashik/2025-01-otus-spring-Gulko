@@ -1,20 +1,25 @@
 package ru.otus.hw.migration.item.writer;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.support.CompositeItemWriter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import ru.otus.hw.model.mongo.dto.AuthorDto;
+import ru.otus.hw.model.sourcedb.dto.AuthorDto;
 
 import javax.sql.DataSource;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Component
 public class AuthorItemWriter {
     private final DataSource dataSource;
+
+    public AuthorItemWriter(
+        @Qualifier("postgresDataSource") DataSource dataSource
+    ) {
+        this.dataSource = dataSource;
+    }
 
     // Insert from Java to Temp table
     @Bean

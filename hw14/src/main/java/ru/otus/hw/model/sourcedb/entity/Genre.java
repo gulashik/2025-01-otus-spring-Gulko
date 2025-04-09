@@ -1,4 +1,4 @@
-package ru.otus.hw.model.mongo.entity;
+package ru.otus.hw.model.sourcedb.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +11,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "authors")
-public class Author {
+@Document(collection = "genres")
+public class Genre {
+
     @Id
     private String id;
 
-    private String fullName;
+    private String name;
 }

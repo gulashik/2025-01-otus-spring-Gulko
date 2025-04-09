@@ -1,4 +1,4 @@
-package ru.otus.hw.model.mongo.dto;
+package ru.otus.hw.model.targetdb.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookDto {
-    private String id;
+    private Long id;
 
     private String title;
 
-    private String authorId;
+    private Long authorId;
 
-    private String genreId;
+    private Long genreId;
 }

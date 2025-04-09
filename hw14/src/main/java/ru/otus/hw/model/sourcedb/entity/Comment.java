@@ -1,4 +1,4 @@
-package ru.otus.hw.model.mongo.entity;
+package ru.otus.hw.model.sourcedb.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package ru.otus.hw.migration.item.processor;
 
 import org.springframework.batch.item.ItemProcessor;
-import ru.otus.hw.model.mongo.dto.GenreDto;
-import ru.otus.hw.model.mongo.entity.Genre;
+import ru.otus.hw.model.sourcedb.dto.GenreDto;
+import ru.otus.hw.model.sourcedb.entity.Genre;
 
 public class GenreItemProcessorImpl implements ItemProcessor<Genre, GenreDto> {
 

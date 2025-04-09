@@ -1,8 +1,8 @@
 package ru.otus.hw.migration.item.processor;
 
 import org.springframework.batch.item.ItemProcessor;
-import ru.otus.hw.model.mongo.dto.BookDto;
-import ru.otus.hw.model.mongo.entity.Book;
+import ru.otus.hw.model.sourcedb.dto.BookDto;
+import ru.otus.hw.model.sourcedb.entity.Book;
 
 public class BookItemProcessorImpl implements ItemProcessor<Book, BookDto> {
 

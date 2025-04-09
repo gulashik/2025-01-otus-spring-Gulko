@@ -2,10 +2,10 @@ package ru.otus.hw.mongock.changelog.test;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
-import ru.otus.hw.model.mongo.entity.Author;
-import ru.otus.hw.model.mongo.entity.Book;
-import ru.otus.hw.model.mongo.entity.Comment;
-import ru.otus.hw.model.mongo.entity.Genre;
+import ru.otus.hw.model.sourcedb.entity.Author;
+import ru.otus.hw.model.sourcedb.entity.Book;
+import ru.otus.hw.model.sourcedb.entity.Comment;
+import ru.otus.hw.model.sourcedb.entity.Genre;
 import ru.otus.hw.repositories.mongo.MongoAuthorRepository;
 import ru.otus.hw.repositories.mongo.MongoBookRepository;
 import ru.otus.hw.repositories.mongo.MongoCommentRepository;
