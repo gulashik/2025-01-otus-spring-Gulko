@@ -30,8 +30,8 @@ public class BookItemWriter {
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
 
         writer.setSql(
-            "INSERT INTO temp_table_book_mongo_to_h2(id_mongo, id_h2) " +
-                "VALUES (:id, nextval('seq_book_h2'))");
+            "INSERT INTO temp_table_book(id_src, id_trg) " +
+                "VALUES (:id, nextval('seq_book_tmp'))");
 
         return writer;
     }
@@ -52,9 +52,9 @@ public class BookItemWriter {
         writer.setSql(
             "INSERT INTO books(title, id, author_id, genre_id) " +
             "VALUES (?, " +
-            "(SELECT id_h2 FROM temp_table_book_mongo_to_h2 WHERE id_mongo = ?), " +
-            "(SELECT id_h2 FROM temp_table_author_mongo_to_h2 WHERE id_mongo = ?), " +
-            "(SELECT id_h2 FROM temp_table_genre_mongo_to_h2 WHERE id_mongo = ?)" +
+            "(SELECT id_trg FROM temp_table_book WHERE id_src = ?), " +
+            "(SELECT id_trg FROM temp_table_author WHERE id_src = ?), " +
+            "(SELECT id_trg FROM temp_table_genre WHERE id_src = ?)" +
             ")"
         );
         writer.setDataSource(dataSource);

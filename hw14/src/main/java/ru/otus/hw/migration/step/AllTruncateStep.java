@@ -1,6 +1,5 @@
 package ru.otus.hw.migration.step;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.TaskletStep;
@@ -16,7 +15,6 @@ import javax.sql.DataSource;
 @Component
 public class AllTruncateStep {
 
-    //private final DataSource dataSource;
     private final DataSource postgresDataSource;
 
     private final JobRepository jobRepository;
@@ -40,12 +38,14 @@ public class AllTruncateStep {
             .tasklet(
                 (contribution, chunkContext) -> {
                     new JdbcTemplate(postgresDataSource).execute(
-                        "BEGIN TRANSACTION;\n" +
-                            "TRUNCATE AUTHORS CASCADE;\n" +
-                            "TRUNCATE BOOKS CASCADE;\n" +
-                            "TRUNCATE COMMENTS CASCADE;\n" +
-                            "TRUNCATE GENRES CASCADE;\n" +
-                            "COMMIT;"
+                        """
+                            BEGIN TRANSACTION;
+                            TRUNCATE AUTHORS CASCADE;
+                            TRUNCATE BOOKS CASCADE;
+                            TRUNCATE COMMENTS CASCADE;
+                            TRUNCATE GENRES CASCADE;
+                            COMMIT;
+                            """
                     );
                     return RepeatStatus.FINISHED;
                 }

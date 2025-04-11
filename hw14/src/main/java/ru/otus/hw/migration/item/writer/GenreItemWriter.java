@@ -30,8 +30,8 @@ public class GenreItemWriter {
         writer.setDataSource(dataSource);
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
         writer.setSql(
-            "INSERT INTO temp_table_genre_mongo_to_h2(id_mongo, id_h2) " +
-            "VALUES (:id, nextval('seq_genre_h2'))")
+            "INSERT INTO temp_table_genre(id_src, id_trg) " +
+            "VALUES (:id, nextval('seq_genre_tmp'))")
         ;
 
         return writer;
@@ -47,7 +47,7 @@ public class GenreItemWriter {
 
         writer.setSql(
             "INSERT INTO genres(id, name) " +
-            "VALUES ((SELECT id_h2 FROM temp_table_genre_mongo_to_h2 WHERE id_mongo = :id), :name)"
+            "VALUES ((SELECT id_trg FROM temp_table_genre WHERE id_src = :id), :name)"
         );
 
         return writer;

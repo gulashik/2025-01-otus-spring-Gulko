@@ -29,8 +29,8 @@ public class AuthorItemWriter {
         writer.setDataSource(dataSource);
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
         writer.setSql(
-            "INSERT INTO temp_table_author_mongo_to_h2(id_mongo, id_h2) " +
-            "VALUES (:id, nextval('seq_author_h2'))"
+            "INSERT INTO temp_table_author(id_src, id_trg) " +
+            "VALUES (:id, nextval('seq_author_tmp'))"
         );
 
         return writer;
@@ -45,7 +45,7 @@ public class AuthorItemWriter {
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
         writer.setSql(
             "INSERT INTO authors(id, full_name) VALUES " +
-            "((SELECT id_h2 FROM temp_table_author_mongo_to_h2 WHERE id_mongo = :id), :fullName)"
+            "((SELECT id_trg FROM temp_table_author WHERE id_src = :id), :fullName)"
         );
 
         return writer;

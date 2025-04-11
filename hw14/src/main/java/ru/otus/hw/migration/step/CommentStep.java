@@ -22,7 +22,7 @@ import static ru.otus.hw.migration.job.Job.CHUNK_SIZE;
 
 @Component
 public class CommentStep {
-    //private final DataSource dataSource;
+
     private final DataSource postgresDataSource;
 
     private final JobRepository jobRepository;
@@ -46,8 +46,8 @@ public class CommentStep {
             .tasklet(
                 (contribution, chunkContext) -> {
                     new JdbcTemplate(postgresDataSource).execute(
-                        "CREATE TABLE temp_table_comment_mongo_to_h2 " +
-                            "(id_mongo VARCHAR(255) NOT NULL UNIQUE, id_h2 BIGINT NOT NULL UNIQUE)"
+                        "CREATE TABLE temp_table_comment " +
+                            "(id_src VARCHAR(255) NOT NULL UNIQUE, id_trg BIGINT NOT NULL UNIQUE)"
                     );
                     return RepeatStatus.FINISHED;
                 }
@@ -62,7 +62,7 @@ public class CommentStep {
             .allowStartIfComplete(true)
             .tasklet(
                 (contribution, chunkContext) -> {
-                    new JdbcTemplate(postgresDataSource).execute("CREATE SEQUENCE IF NOT EXISTS seq_comment_h2");
+                    new JdbcTemplate(postgresDataSource).execute("CREATE SEQUENCE IF NOT EXISTS seq_comment_tmp");
                     return RepeatStatus.FINISHED;
                 }
                 , platformTransactionManager
@@ -92,7 +92,7 @@ public class CommentStep {
             .tasklet(
                 (contribution, chunkContext) -> {
                     new JdbcTemplate(postgresDataSource).execute(
-                        "DROP TABLE temp_table_comment_mongo_to_h2"
+                        "DROP TABLE temp_table_comment"
                     );
                     return RepeatStatus.FINISHED;
                 }
@@ -108,7 +108,7 @@ public class CommentStep {
             .tasklet(
                 (contribution, chunkContext) -> {
                     new JdbcTemplate(postgresDataSource)
-                        .execute("DROP SEQUENCE IF EXISTS seq_comment_h2");
+                        .execute("DROP SEQUENCE IF EXISTS seq_comment_tmp");
                     return RepeatStatus.FINISHED;
                 }
                 , platformTransactionManager

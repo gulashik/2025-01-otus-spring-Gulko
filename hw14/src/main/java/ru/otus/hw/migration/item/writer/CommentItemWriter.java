@@ -29,8 +29,8 @@ public class CommentItemWriter {
         writer.setDataSource(dataSource);
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
         writer.setSql(
-            "INSERT INTO temp_table_comment_mongo_to_h2(id_mongo, id_h2) " +
-                "VALUES (:id, nextval('seq_comment_h2'))"
+            "INSERT INTO temp_table_comment(id_src, id_trg) " +
+                "VALUES (:id, nextval('seq_comment_tmp'))"
         );
 
         return writer;
@@ -52,8 +52,8 @@ public class CommentItemWriter {
         writer.setSql(
             "INSERT INTO comments(comment_text, id, book_id) " +
             "VALUES (?, " +
-            "(SELECT id_h2 FROM temp_table_comment_mongo_to_h2 WHERE id_mongo = ?), " +
-            "(SELECT id_h2 FROM temp_table_book_mongo_to_h2 WHERE id_mongo = ?))"
+            "(SELECT id_trg FROM temp_table_comment WHERE id_src = ?), " +
+            "(SELECT id_trg FROM temp_table_book WHERE id_src = ?))"
         );
 
         return writer;

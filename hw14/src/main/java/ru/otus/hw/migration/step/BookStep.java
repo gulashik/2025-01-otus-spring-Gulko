@@ -22,7 +22,7 @@ import static ru.otus.hw.migration.job.Job.CHUNK_SIZE;
 
 @Component
 public class BookStep {
-    //private final DataSource dataSource;
+
     private final DataSource postgresDataSource;
 
     private final JobRepository jobRepository;
@@ -46,8 +46,8 @@ public class BookStep {
             .tasklet(
                 (contribution, chunkContext) -> {
                     new JdbcTemplate(postgresDataSource).execute(
-                        "CREATE TABLE IF NOT EXISTS temp_table_book_mongo_to_h2 " +
-                            "(id_mongo VARCHAR(255) NOT NULL UNIQUE, id_h2 BIGINT NOT NULL UNIQUE)"
+                        "CREATE TABLE IF NOT EXISTS temp_table_book " +
+                            "(id_src VARCHAR(255) NOT NULL UNIQUE, id_trg BIGINT NOT NULL UNIQUE)"
                     );
                     return RepeatStatus.FINISHED;
                 }
@@ -77,7 +77,7 @@ public class BookStep {
             .allowStartIfComplete(true)
             .tasklet(
                 (contribution, chunkContext) -> {
-                    new JdbcTemplate(postgresDataSource).execute("CREATE SEQUENCE IF NOT EXISTS seq_book_h2");
+                    new JdbcTemplate(postgresDataSource).execute("CREATE SEQUENCE IF NOT EXISTS seq_book_tmp");
                     return RepeatStatus.FINISHED;
                 }
                 , platformTransactionManager
@@ -92,7 +92,7 @@ public class BookStep {
             .tasklet(
                 (contribution, chunkContext) -> {
                     new JdbcTemplate(postgresDataSource)
-                        .execute("DROP TABLE temp_table_book_mongo_to_h2");
+                        .execute("DROP TABLE temp_table_book");
                     return RepeatStatus.FINISHED;
                 }
                 , platformTransactionManager
@@ -107,7 +107,7 @@ public class BookStep {
             .tasklet(
                 (contribution, chunkContext) -> {
                     new JdbcTemplate(postgresDataSource)
-                        .execute("DROP SEQUENCE IF EXISTS seq_book_h2");
+                        .execute("DROP SEQUENCE IF EXISTS seq_book_tmp");
                     return RepeatStatus.FINISHED;
                 }
                 , platformTransactionManager
