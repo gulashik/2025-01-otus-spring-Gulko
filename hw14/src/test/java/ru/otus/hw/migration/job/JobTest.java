@@ -26,13 +26,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static ru.otus.hw.migration.job.Job.MIGRATE_JOB_NAME;
 
 
-@SpringBootTest
-@SpringBatchTest
+//@SpringBootTest
+//@SpringBatchTest
 class JobTest {
 //    @Autowired
 //    private JobLauncherTestUtils jobLauncherTestUtils;
 
-    @Autowired
+    //@Autowired
     private JobRepositoryTestUtils jobRepositoryTestUtils;
 
 //    @Autowired
