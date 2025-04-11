@@ -1,6 +1,8 @@
 package ru.otus.hw.config;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceContext;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -78,25 +80,36 @@ public class DataSourceConfig {
         EntityManagerFactoryBuilder builder,
         @Qualifier("postgresDataSource") DataSource dataSource
     ) {
-
-        Map<String, String> properties = new HashMap<>();
-        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        properties.put("hibernate.hbm2ddl.auto", "update");
-        properties.put("hibernate.physical_naming_strategy",
-            "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
-
         return builder
             .dataSource(dataSource)
-            .packages("ru.otus.hw.model.target.entity") // Используем правильный пакет
-            .properties(properties)
+            .packages("ru.otus.hw.model.targetdb.entity") // Указываем пакеты для сканирования сущностей
             .persistenceUnit("postgres")
+            .properties(additionalJpaProperties()) // Можно добавить дополнительные свойства, если нужно
             .build();
     }
 
+    private Map<String, String> additionalJpaProperties() {
+        Map<String, String> properties = new HashMap<>();
+        properties.put("hibernate.hbm2ddl.auto", "none"); // или другое значение в зависимости от ваших потребностей
+        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        // Можно добавить и другие свойства
+        return properties;
+    }
+
+
     @Bean(name = "postgresTransactionManager")
     public PlatformTransactionManager postgresTransactionManager(
-        @Qualifier("postgresEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
+        @Qualifier("postgresEntityManagerFactory") EntityManagerFactory entityManagerFactory
+    ) {
         return new JpaTransactionManager(entityManagerFactory);
+    }
+
+    @Bean(name = "postgresEntityManager")
+    @PersistenceContext(unitName = "postgresEntityManagerFactory")
+    public EntityManager postgresEntityManager(
+        @Qualifier("postgresEntityManagerFactory") EntityManagerFactory entityManagerFactory
+    ) {
+        return entityManagerFactory.createEntityManager();
     }
 
     @Bean
