@@ -26,7 +26,7 @@ import java.util.Map;
 @Configuration
 @EnableBatchProcessing
 @EnableJpaRepositories(
-    basePackages = "ru.otus.hw.model.targetdb.entity",
+    basePackages = {"ru.otus.hw.model.targetdb.entity","ru.otus.hw.repositories"},
     entityManagerFactoryRef = "postgresEntityManagerFactory",
     transactionManagerRef = "postgresTransactionManager"
 )
