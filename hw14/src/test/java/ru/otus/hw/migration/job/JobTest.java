@@ -46,16 +46,16 @@ class JobTest {
 //
 //    @Autowired
 //    private JpaGenreRepository jpaGenreRepository;
-
-
-
-    @BeforeEach
-    void clearMetaData() {
-        jobRepositoryTestUtils.removeJobExecutions();
-    }
-
-    @Test
-    void testJob() throws Exception {
+//
+//
+//
+//    @BeforeEach
+//    void clearMetaData() {
+//        jobRepositoryTestUtils.removeJobExecutions();
+//    }
+//
+//    @Test
+//    void testJob() throws Exception {
 //        // Job
 //        final Job job = jobLauncherTestUtils.getJob();
 //
@@ -160,5 +160,5 @@ class JobTest {
 //            new CommentDto(5L, "Comment_5", 2L),
 //            new CommentDto(6L, "Comment_6", 1L)
 //        );
-    }
+//    }
 }
