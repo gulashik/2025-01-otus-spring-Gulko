@@ -20,7 +20,6 @@ public class IntegrationFlowConfig {
 
     private final ProductProcessorService productProcessorService;
 
-
     /**
      * Собирает продукты в коллекцию. Забавно, но нужно просто отдать туже коллекцию.
      *

@@ -12,7 +12,8 @@ import ru.otus.hw.service.ProductGeneratorService;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(properties = "scheduler.enabled=false")
 class IntegrationFlowConfigTest {
@@ -23,11 +24,15 @@ class IntegrationFlowConfigTest {
     @Autowired
     private MessageChannel inputChannel;
 
+    @Autowired
+    private ProductGateway productGateway;
+
     @Test
     void contextLoads() {
         // Проверяем, что контекст загружается корректно
         assertNotNull(generatorService);
         assertNotNull(inputChannel);
+        assertNotNull(productGateway);
     }
 
     @Test
@@ -46,7 +51,7 @@ class IntegrationFlowConfigTest {
             new Product(ProductType.BEVERAGE, "Test Beef", BigDecimal.valueOf(22.50))
         );
 
-        // Отправляем в канал и проверяем, что не возникает исключений
         inputChannel.send(new GenericMessage<>(products));
+        productGateway.sendProduct(products);
     }
 }

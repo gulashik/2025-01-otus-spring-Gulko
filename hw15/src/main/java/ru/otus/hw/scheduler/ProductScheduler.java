@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.integration.support.MessageBuilder;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.otus.hw.config.ProductGateway;
 import ru.otus.hw.model.Product;
 import ru.otus.hw.service.ProductGeneratorService;
 
@@ -25,7 +24,7 @@ public class ProductScheduler {
 
     private final ProductGeneratorService generatorService;
 
-    private final MessageChannel inputChannel;
+    private final ProductGateway productGateway;
 
     @Value("${product.batch.size:5}")
     private int batchSize;
@@ -38,7 +37,6 @@ public class ProductScheduler {
         List<Product> products = generatorService.generateProducts(batchSize);
         log.info("Generated products {} ", products);
 
-        // inputChannel
-        inputChannel.send(MessageBuilder.withPayload(products).build());
+        productGateway.sendProduct(products);
     }
 }
