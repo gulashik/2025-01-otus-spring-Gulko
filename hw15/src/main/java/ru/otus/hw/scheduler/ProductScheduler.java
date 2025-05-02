@@ -21,6 +21,7 @@ import java.util.List;
 public class ProductScheduler {
 
     private final ProductGeneratorService generatorService;
+
     private final MessageChannel inputChannel;
 
     @Value("${product.batch.size:5}")
