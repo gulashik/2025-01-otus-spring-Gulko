@@ -20,6 +20,14 @@ public class ChannelConfig {
     }
 
     /**
+     * Канал для уплощённых заказов
+     */
+    @Bean
+    public MessageChannel splitProductChannel() {
+        return new DirectChannel();
+    }
+
+    /**
      * Канал для продуктов типа FISH.
      */
     @Bean

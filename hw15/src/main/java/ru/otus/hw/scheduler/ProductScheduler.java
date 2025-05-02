@@ -27,18 +27,14 @@ public class ProductScheduler {
     private int batchSize;
 
     /**
-     * Метод, периодически генерирует продукты и отправляет их во входной канал.
+     * Метод периодически генерирует продукты и отправляет их во входной канал.
      */
     @Scheduled(fixedRate = 5000) // Запуск каждые 5 секунд
     public void generateAndSendProducts() {
         List<Product> products = generatorService.generateProducts(batchSize);
         log.info("Generated products {} ", products);
 
-        // Отправляем каждый продукт в inputChannel
-        products.forEach(product ->
-            inputChannel.send(MessageBuilder.withPayload(product).build())
-        );
-
-//        inputChannel.send(MessageBuilder.withPayload(products).build());
+        // inputChannel
+        inputChannel.send(MessageBuilder.withPayload(products).build());
     }
 }

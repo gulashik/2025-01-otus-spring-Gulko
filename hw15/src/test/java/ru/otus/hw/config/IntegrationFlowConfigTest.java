@@ -40,9 +40,13 @@ class IntegrationFlowConfigTest {
     @Test
     void testSendToInputChannel() {
         // Создаем тестовый продукт
-        Product product = new Product(ProductType.BEVERAGE, "Test Cola", BigDecimal.valueOf(2.50));
+        var products = List.of(
+            new Product(ProductType.BEVERAGE, "Test Cola", BigDecimal.valueOf(2.50)),
+            new Product(ProductType.BEVERAGE, "Test Fish", BigDecimal.valueOf(12.50)),
+            new Product(ProductType.BEVERAGE, "Test Beef", BigDecimal.valueOf(22.50))
+        );
 
         // Отправляем в канал и проверяем, что не возникает исключений
-        inputChannel.send(new GenericMessage<>(product));
+        inputChannel.send(new GenericMessage<>(products));
     }
 }

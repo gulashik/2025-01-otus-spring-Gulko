@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.Router;
 import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.integration.annotation.Splitter;
 import ru.otus.hw.model.Product;
 import ru.otus.hw.service.ProductProcessorService;
+
+import java.util.Collection;
 
 /**
  * Конфигурация Spring Integration.
@@ -17,13 +20,25 @@ public class IntegrationFlowConfig {
 
     private final ProductProcessorService productProcessorService;
 
+
+    /**
+     * Собирает продукты в коллекцию. Забавно, но нужно просто отдать туже коллекцию.
+     *
+     * @param products коллекция для разделения
+     * @return список будет по элементо получена в следующем канале.
+     */
+    @Splitter(inputChannel = "inputChannel", outputChannel = "splitProductChannel")
+    public Collection<Product> splitProduct(Collection<Product> products) {
+        return products;
+    }
+
     /**
      * Маршрутизатор для распределения продуктов по соответствующим каналам в зависимости от их типа.
      *
      * @param product продукт для маршрутизации
      * @return имя канала, в который должен быть направлен продукт
      */
-    @Router(inputChannel = "inputChannel")
+    @Router(inputChannel = "splitProductChannel")
     public String routeByProductType(Product product) {
         return switch (product.type()) {
             case FISH -> "fishChannel";
