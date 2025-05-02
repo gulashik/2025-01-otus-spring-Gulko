@@ -3,6 +3,7 @@ package ru.otus.hw.scheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,9 +16,11 @@ import java.util.List;
 /**
  * Компонент для периодической генерации и отправки продуктов.
  */
-@Component
 @RequiredArgsConstructor
 @Slf4j
+@Component
+/*для возможности отключения планировщика для тестов*/
+@ConditionalOnProperty(name = "scheduler.enabled", havingValue = "true", matchIfMissing = true)
 public class ProductScheduler {
 
     private final ProductGeneratorService generatorService;

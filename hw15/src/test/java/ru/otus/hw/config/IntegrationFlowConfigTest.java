@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(properties = "scheduler.enabled=false")
 class IntegrationFlowConfigTest {
 
     @Autowired
