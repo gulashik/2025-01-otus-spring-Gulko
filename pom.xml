@@ -32,6 +32,7 @@
         <module>hw12</module>
         <module>hw13</module>
         <module>hw14</module>
+        <module>hw15</module>
     </modules>
 
     <dependencyManagement>
