@@ -15,8 +15,6 @@ public class Application {
 				-> http://localhost:8080/h2-console
 					url=jdbc:h2:mem:maindb
 					user=sa password=<empty>
-					роли-SELECT * FROM AUTHORITIES
-					пользователи-SELECT * FROM USERS
 				"""
 		);
 	}

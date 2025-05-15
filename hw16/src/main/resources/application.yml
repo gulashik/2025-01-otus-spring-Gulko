@@ -18,3 +18,8 @@ spring:
       mode: always
 #      data-locations: data.sql
 #      schema-locations: schema.sql
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: mappings
