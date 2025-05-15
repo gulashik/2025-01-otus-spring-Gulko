@@ -18,8 +18,19 @@ spring:
       mode: always
 #      data-locations: data.sql
 #      schema-locations: schema.sql
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: mappings
+
+management:
+  endpoint:
+    logfile:
+      enabled: true
+    health:
+      show-details: always
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,logfile,mappings
+
+logging:
+  file:
+    name: logs/application.log
