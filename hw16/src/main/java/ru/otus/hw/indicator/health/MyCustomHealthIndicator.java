@@ -9,7 +9,7 @@ import java.util.Random;
 @Component
 public class MyCustomHealthIndicator implements HealthIndicator {
 
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random();
 
     @Override
     public Health health() {
@@ -28,6 +28,6 @@ public class MyCustomHealthIndicator implements HealthIndicator {
     }
     
     private boolean checkIfSystemIsUp() {
-        return random.nextBoolean();
+        return RANDOM.nextBoolean();
     }
 }
