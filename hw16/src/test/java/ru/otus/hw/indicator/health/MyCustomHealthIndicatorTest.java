@@ -20,7 +20,7 @@ class MyCustomHealthIndicatorTest {
     @BeforeAll
     static void setUp() throws Exception {
         healthIndicator = new MyCustomHealthIndicator();
-        Field randomField = MyCustomHealthIndicator.class.getDeclaredField("RANDOM");
+        Field randomField = MyCustomHealthIndicator.class.getDeclaredField("randomizer");
         randomField.setAccessible(true);
         mockRandom = mock(Random.class);
         randomField.set(healthIndicator, mockRandom);
