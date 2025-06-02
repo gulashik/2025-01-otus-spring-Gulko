@@ -12,7 +12,10 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Production stage(чистая сборка без мусора)
-FROM arm64v8/eclipse-temurin:17-jre
+# У меня на ARM работает
+# FROM arm64v8/eclipse-temurin:17-jre
+# Вроде, должно работать и на x86_64 и на Arm
+FROM eclipse-temurin:17-jre
 
 # Создание непривилегированного пользователя для безопасности
 RUN groupadd -g 1001 appgroup && \
