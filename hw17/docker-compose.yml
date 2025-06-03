@@ -36,21 +36,20 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      # Database configuration
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: testdb
-      DB_USER: user
-      DB_PASSWORD: password
+      # Database configuration - стандартные Spring Boot переменные
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testdb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
 
       # Server configuration
       SERVER_PORT: 8080
 
       # Logging configuration
-      LOG_LEVEL: INFO
-      APP_LOG_LEVEL: INFO
-      SQL_LOG_LEVEL: WARN
-      SHOW_SQL: false
+      LOGGING_LEVEL_ROOT: INFO
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB: INFO
+      LOGGING_LEVEL_ORG_HIBERNATE_SQL: WARN
+      SPRING_JPA_SHOW_SQL: false
 
       # JVM options for containerized environment
       JAVA_OPTS: >-

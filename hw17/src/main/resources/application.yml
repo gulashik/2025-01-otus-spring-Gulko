@@ -3,10 +3,10 @@ spring:
     name: spring-postgres-app
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:testdb}
-    username: ${DB_USER:user}
-    password: ${DB_PASSWORD:password}
-    driver-class-name: org.postgresql.Driver
+    url: null # jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:testdb}
+    username: null # ${DB_USER:user}
+    password: null # ${DB_PASSWORD:password}
+    driver-class-name: null # org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -39,10 +39,6 @@ management:
       enabled: true
 
 logging:
-  level:
-    org.springframework.web: ${LOG_LEVEL:INFO}
-    org.hibernate.SQL: ${SQL_LOG_LEVEL:WARN}
-    com.example: ${APP_LOG_LEVEL:INFO}
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
