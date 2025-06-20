@@ -1,16 +1,29 @@
 
+# Пересобираем
+```
+mvn clean package -DskipTests
+```
 ```shell
-# Запускаем приложение
 podman compose down -v
 clear
-podman compose up -d
+podman compose up -d --build
+#podman compose up postgres -d
 podman compose ps
 ```
 
 ```shell
 # Дожидаемся корректного состояния приложения
 clear
-curl http://localhost:8080/actuator/health | jq
+while true; do
+  STATUS=$(curl -s http://localhost:8080/actuator/health | jq -r .status 2>/dev/null)
+
+  if [ ${STATUS:=DOWN} = "UP" ]; then
+    echo "Status: $STATUS - Application is ready"
+    break
+  fi
+  echo "Status: $STATUS - waiting..."
+  sleep 5
+done
 ```
 
 ```shell
@@ -32,6 +45,7 @@ curl http://localhost:8080/api/users | jq
 
 ```shell
 # Обновление пользователя
+clear
 curl -X PUT http://localhost:8080/api/users/1 \
   -H "Content-Type: application/json" \
   -d '{

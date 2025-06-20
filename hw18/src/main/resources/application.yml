@@ -3,10 +3,10 @@ spring:
     name: spring-postgres-app
 
   datasource:
-    url: null # jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:testdb}
-    username: null # ${DB_USER:user}
-    password: null # ${DB_PASSWORD:password}
-    driver-class-name: null # org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/testdb
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -26,19 +26,214 @@ server:
   port: ${SERVER_PORT:8080}
   shutdown: graceful
 
+# Resilience4j Configuration
+resilience4j:
+  # Circuit Breaker конфигурация
+  circuitbreaker:
+    configs:
+      default:
+        # Регистрация исключений, которые считаются неудачами
+        registerHealthIndicator: true
+        # Размер кольцевого буфера в закрытом состоянии
+        slidingWindowSize: 10
+        # Минимальное количество вызовов для расчета частоты отказов
+        minimumNumberOfCalls: 5
+        # Размер кольцевого буфера в полуоткрытом состоянии
+        permittedNumberOfCallsInHalfOpenState: 3
+        # Автоматический переход из открытого в полуоткрытое состояние
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        # Время ожидания в открытом состоянии
+        waitDurationInOpenState: 5s
+        # Порог частоты отказов (в процентах)
+        failureRateThreshold: 50
+        # Исключения, которые считаются неудачами
+        recordExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.util.concurrent.TimeoutException
+          - java.io.IOException
+          - org.springframework.dao.DataAccessException
+        # Исключения, которые игнорируются при подсчете отказов
+        ignoreExceptions:
+          - java.lang.IllegalArgumentException
+          - jakarta.validation.ValidationException
+    instances:
+      # Конфигурация для операций с пользователями
+      userService:
+        baseConfig: default
+        failureRateThreshold: 60
+        waitDurationInOpenState: 10s
+      # Конфигурация для операций с базой данных
+      databaseOperations:
+        baseConfig: default
+        failureRateThreshold: 70
+        minimumNumberOfCalls: 3
+        waitDurationInOpenState: 15s
+
+  # Retry конфигурация
+  retry:
+    configs:
+      default:
+        # Максимальное количество попыток (включая первичную)
+        maxAttempts: 3
+        # Время ожидания между попытками
+        waitDuration: 500ms
+        # Включение экспоненциального backoff
+        enableExponentialBackoff: true
+        # Множитель для экспоненциального backoff
+        exponentialBackoffMultiplier: 2
+        # Максимальное время ожидания
+        maxWaitDuration: 5s
+        # Исключения, при которых выполняется retry
+        retryExceptions:
+          - org.springframework.dao.QueryTimeoutException
+          - org.springframework.dao.TransientDataAccessException
+          - java.net.SocketTimeoutException
+        # Исключения, при которых retry НЕ выполняется
+        ignoreExceptions:
+          - java.lang.IllegalArgumentException
+          - jakarta.validation.ValidationException
+          - org.springframework.dao.DuplicateKeyException
+    instances:
+      # Конфигурация retry для операций с пользователями
+      userService:
+        baseConfig: default
+        maxAttempts: 2
+        waitDuration: 1s
+      # Конфигурация retry для операций с базой данных
+      databaseOperations:
+        baseConfig: default
+        maxAttempts: 4
+        waitDuration: 200ms
+
+  # Rate Limiter конфигурация
+  ratelimiter:
+    configs:
+      default:
+        # Ограничение по времени
+        limitForPeriod: 10
+        # Период ограничения
+        limitRefreshPeriod: 1s
+        # Таймаут ожидания разрешения
+        timeoutDuration: 1s
+        registerHealthIndicator: true
+    instances:
+      # Rate limiter для API пользователей
+      userApi:
+        baseConfig: default
+        limitForPeriod: 20
+        limitRefreshPeriod: 1s
+      # Rate limiter для операций создания
+      createOperations:
+        baseConfig: default
+        limitForPeriod: 5
+        limitRefreshPeriod: 1s
+
+  # Time Limiter конфигурация
+  timelimiter:
+    configs:
+      default:
+        # Таймаут выполнения операции
+        timeoutDuration: 3s
+        # Отмена выполнения при таймауте
+        cancelRunningFuture: true
+    instances:
+      # Таймауты для операций с пользователями
+      userService:
+        baseConfig: default
+        timeoutDuration: 5s
+      # Таймауты для операций с базой данных
+      databaseOperations:
+        baseConfig: default
+        timeoutDuration: 2s
+
+  # Bulkhead конфигурация (изоляция ресурсов)
+  bulkhead:
+    configs:
+      default:
+        # Максимальное количество одновременных вызовов
+        maxConcurrentCalls: 25
+        # Максимальное время ожидания входа
+        maxWaitDuration: 1s
+    instances:
+      # Bulkhead для операций с пользователями
+      userService:
+        baseConfig: default
+        maxConcurrentCalls: 10
+      # Bulkhead для операций с базой данных
+      databaseOperations:
+        baseConfig: default
+        maxConcurrentCalls: 15
+
+  # Thread Pool Bulkhead конфигурация
+  thread-pool-bulkhead:
+    configs:
+      default:
+        # Максимальный размер пула потоков
+        maxThreadPoolSize: 4
+        # Базовый размер пула потоков
+        coreThreadPoolSize: 2
+        # Размер очереди
+        queueCapacity: 20
+        # Время жизни потока
+        keepAliveDuration: 20ms
+    instances:
+      # Thread pool для асинхронных операций
+      asyncUserService:
+        baseConfig: default
+        maxThreadPoolSize: 8
+        coreThreadPoolSize: 4
+
+# Spring Boot Actuator конфигурация для мониторинга
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,prometheus
+        # Включаем все endpoints включая Resilience4j
+        include: "*"
+      base-path: /actuator
   endpoint:
     health:
       show-details: always
+      show-components: always
+    # Специфичные endpoints для Resilience4j
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+    retries:
+      enabled: true
+    bulkheads:
+      enabled: true
+    timelimiters:
+      enabled: true
+  # Health indicators
   health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
     db:
       enabled: true
+  # Метрики
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        resilience4j.circuitbreaker.calls: true
+        resilience4j.retry.calls: true
+        resilience4j.ratelimiter.calls: true
 
+# Логирование
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    # Включаем логирование Resilience4j для отладки
+    io.github.resilience4j: DEBUG
+    ru.otus.hw: DEBUG
+    # Логирование для мониторинга состояния circuit breaker
+    io.github.resilience4j.circuitbreaker: INFO
+    io.github.resilience4j.retry: INFO

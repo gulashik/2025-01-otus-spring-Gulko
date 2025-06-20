@@ -3,7 +3,6 @@ package ru.otus.hw.controller;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +12,9 @@ import ru.otus.hw.service.UserService;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * REST контроллер для управления пользователями.
+ */
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "*")
@@ -22,13 +24,20 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * Получение всех пользователей или поиск по параметру.
+     *
+     * @param search опциональный параметр поиска
+     * @return ResponseEntity со списком пользователей или ошибкой
+     */
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String search) {
+        logger.info("Request to get all users, search parameter: {}", search);
+
         try {
             List<User> users;
             if (search != null && !search.trim().isEmpty()) {
@@ -45,8 +54,16 @@ public class UserController {
         }
     }
 
+    /**
+     * Получение пользователя по ID.
+     *
+     * @param id идентификатор пользователя
+     * @return ResponseEntity с пользователем или ошибкой
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        logger.info("Request to get user by id: {}", id);
+
         try {
             return userService.getUserById(id)
                 .map(user -> {
@@ -59,14 +76,24 @@ public class UserController {
                 });
         } catch (Exception e) {
             logger.error("Error retrieving user with id: {}", id, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Internal server error"));
         }
     }
 
+    /**
+     * Создание нового пользователя.
+     *
+     * @param user данные пользователя
+     * @return ResponseEntity с созданным пользователем или ошибкой
+     */
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
+        logger.info("Request to create user with email: {}", user.getEmail());
+
         try {
             User createdUser = userService.createUser(user);
+
             logger.info("Created user with id: {}", createdUser.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
         } catch (IllegalArgumentException e) {
@@ -80,10 +107,20 @@ public class UserController {
         }
     }
 
+    /**
+     * Обновление пользователя.
+     *
+     * @param id идентификатор пользователя
+     * @param userDetails новые данные пользователя
+     * @return ResponseEntity с обновленным пользователем или ошибкой
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody User userDetails) {
+        logger.info("Request to update user with id: {}", id);
+
         try {
             User updatedUser = userService.updateUser(id, userDetails);
+
             logger.info("Updated user with id: {}", id);
             return ResponseEntity.ok(updatedUser);
         } catch (IllegalArgumentException e) {
@@ -97,8 +134,16 @@ public class UserController {
         }
     }
 
+    /**
+     * Удаление пользователя.
+     *
+     * @param id идентификатор пользователя
+     * @return ResponseEntity с результатом операции
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        logger.info("Request to delete user with id: {}", id);
+
         try {
             userService.deleteUser(id);
             logger.info("Deleted user with id: {}", id);
@@ -112,14 +157,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of("error", "Internal server error"));
         }
-    }
-
-    @GetMapping("/health")
-    public ResponseEntity<Map<String, String>> healthCheck() {
-        return ResponseEntity.ok(Map.of(
-            "status", "UP",
-            "service", "spring-postgres-app",
-            "timestamp", java.time.LocalDateTime.now().toString()
-        ));
     }
 }
