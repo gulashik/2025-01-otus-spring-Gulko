@@ -163,7 +163,6 @@ public class UserService {
      */
     @CircuitBreaker(name = "userService", fallbackMethod = "searchUsersFallback")
     @Retry(name = "userService")
-    @RateLimiter(name = "userApi")
     @Bulkhead(name = "userService")
     public List<User> searchUsers(String search) {
         logger.info("Searching users with term: {}", search);
@@ -205,7 +204,6 @@ public class UserService {
      */
     @CircuitBreaker(name = "userService")
     @Retry(name = "userService")
-    @RateLimiter(name = "createOperations") // Более строгое ограничение для создания
     @Bulkhead(name = "userService")
     public User createUser(User user) {
 
@@ -253,7 +251,6 @@ public class UserService {
      */
     @CircuitBreaker(name = "userService")
     @Retry(name = "userService")
-    @RateLimiter(name = "userApi")
     @Bulkhead(name = "userService")
     public User updateUser(Long id, User userDetails) {
         logger.info("Updating user with id: {}", id);
@@ -300,7 +297,6 @@ public class UserService {
      */
     @CircuitBreaker(name = "userService")
     @Retry(name = "userService")
-    @RateLimiter(name = "userApi")
     @Bulkhead(name = "userService")
     public void deleteUser(Long id) {
         logger.info("Deleting user with id: {}", id);

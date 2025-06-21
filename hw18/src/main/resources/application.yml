@@ -74,7 +74,7 @@ resilience4j:
     configs:
       default:
         # Максимальное количество попыток (включая первичную)
-        maxAttempts: 3
+        maxAttempts: 50
         # Время ожидания между попытками
         waitDuration: 500ms
         # Включение экспоненциального backoff
@@ -82,7 +82,7 @@ resilience4j:
         # Множитель для экспоненциального backoff
         exponentialBackoffMultiplier: 2
         # Максимальное время ожидания
-        maxWaitDuration: 5s
+        exponential-max-wait-duration: 5s
         # Исключения, при которых выполняется retry
         retryExceptions:
           - org.springframework.dao.QueryTimeoutException
@@ -97,7 +97,7 @@ resilience4j:
       # Конфигурация retry для операций с пользователями
       userService:
         baseConfig: default
-        maxAttempts: 2
+        maxAttempts: 20
         waitDuration: 1s
       # Конфигурация retry для операций с базой данных
       databaseOperations:
@@ -120,13 +120,15 @@ resilience4j:
       # Rate limiter для API пользователей
       userApi:
         baseConfig: default
-        limitForPeriod: 20
-        limitRefreshPeriod: 1s
+        limitForPeriod: 5
+        limitRefreshPeriod: 3s
+        timeoutDuration: 500ms
       # Rate limiter для операций создания
       createOperations:
         baseConfig: default
-        limitForPeriod: 5
+        limitForPeriod: 1
         limitRefreshPeriod: 1s
+        timeoutDuration: 500ms
 
   # Time Limiter конфигурация
   timelimiter:
@@ -216,14 +218,15 @@ management:
       enabled: true
   # Метрики
   metrics:
-    export:
-      prometheus:
-        enabled: true
     distribution:
       percentiles-histogram:
         resilience4j.circuitbreaker.calls: true
         resilience4j.retry.calls: true
         resilience4j.ratelimiter.calls: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 # Логирование
 logging:

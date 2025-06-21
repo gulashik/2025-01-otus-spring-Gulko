@@ -1,5 +1,6 @@
 package ru.otus.hw.controller;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class UserController {
      * @param search опциональный параметр поиска
      * @return ResponseEntity со списком пользователей или ошибкой
      */
+    @RateLimiter(name = "userApi")
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String search) {
         logger.info("Request to get all users, search parameter: {}", search);
@@ -88,6 +90,7 @@ public class UserController {
      * @return ResponseEntity с созданным пользователем или ошибкой
      */
     @PostMapping
+    @RateLimiter(name = "createOperations")
     public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
         logger.info("Request to create user with email: {}", user.getEmail());
 
@@ -115,6 +118,7 @@ public class UserController {
      * @return ResponseEntity с обновленным пользователем или ошибкой
      */
     @PutMapping("/{id}")
+    @RateLimiter(name = "userApi")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody User userDetails) {
         logger.info("Request to update user with id: {}", id);
 
@@ -141,9 +145,9 @@ public class UserController {
      * @return ResponseEntity с результатом операции
      */
     @DeleteMapping("/{id}")
+    @RateLimiter(name = "userApi")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         logger.info("Request to delete user with id: {}", id);
-
         try {
             userService.deleteUser(id);
             logger.info("Deleted user with id: {}", id);
