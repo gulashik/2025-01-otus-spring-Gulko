@@ -2,7 +2,6 @@ package ru.otus.hw.service;
 
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import org.slf4j.Logger;
@@ -40,7 +39,6 @@ public class UserService {
      */
     @CircuitBreaker(name = "userService", fallbackMethod = "getAllUsersFallback")
     @Retry(name = "userService")
-    @RateLimiter(name = "userApi")
     @Bulkhead(name = "userService")
     public List<User> getAllUsers() {
         logger.info("Fetching all users with resilience patterns");
