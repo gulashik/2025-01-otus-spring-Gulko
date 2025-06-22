@@ -3,7 +3,6 @@ package ru.otus.hw.service;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
-import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -74,7 +73,6 @@ public class UserService {
      */
     @CircuitBreaker(name = "databaseOperations", fallbackMethod = "getUserByIdFallback")
     @Retry(name = "databaseOperations")
-    @TimeLimiter(name = "databaseOperations")
     @Bulkhead(name = "databaseOperations")
     public Optional<User> getUserById(Long id) {
         logger.info("Fetching user with id: {}", id);
