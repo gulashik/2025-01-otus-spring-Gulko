@@ -1,0 +1,50 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/testdb
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Тестовая конфигурация Resilience4j
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+        recordExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.util.concurrent.TimeoutException
+          - java.io.IOException
+          - org.springframework.dao.DataAccessException
+        ignoreExceptions:
+          - java.lang.IllegalArgumentException
+          - jakarta.validation.ValidationException
+    instances:
+      userService:
+        baseConfig: default
+        failureRateThreshold: 60
+        waitDurationInOpenState: 10s
+      databaseOperations:
+        baseConfig: default
+        failureRateThreshold: 70
+        minimumNumberOfCalls: 3
+        waitDurationInOpenState: 15s
+
+logging:
+  level:
+    io.github.resilience4j: DEBUG
+    ru.otus.hw: DEBUG

@@ -35,6 +35,7 @@
         <module>hw15</module>
         <module>hw16</module>
         <module>hw17</module>
+        <module>hw18</module>
     </modules>
 
     <dependencyManagement>
